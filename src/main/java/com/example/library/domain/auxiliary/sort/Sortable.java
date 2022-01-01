@@ -1,4 +1,4 @@
-package com.example.library.domain.sort;
+package com.example.library.domain.auxiliary.sort;
 
 import java.util.List;
 

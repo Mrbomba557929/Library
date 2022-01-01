@@ -1,5 +1,6 @@
-package com.example.library.domain.page;
+package com.example.library.domain.auxiliary.page;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class Page<T> implements Pageable<T> {
 
-    private final List<T> items;
+    private final List<T> content;
     private final int numberOfPage;
     private final int currentPage;
     private final int numberOfElements;
@@ -31,12 +32,13 @@ public class Page<T> implements Pageable<T> {
 
     @Override
     public List<T> getContent() {
-        return items;
+        return content;
     }
 
+    @JsonIgnore
     @Override
     public boolean hasContent() {
-        return !items.isEmpty();
+        return !content.isEmpty();
     }
 
     @Override
@@ -59,6 +61,7 @@ public class Page<T> implements Pageable<T> {
         return hasPrevious;
     }
 
+    @JsonIgnore
     @Override
     public Iterator<T> iterator() {
         return new PageIterator();
@@ -66,7 +69,7 @@ public class Page<T> implements Pageable<T> {
 
     @Override
     public <U> Pageable<U> map(Function<? super T, ? extends U> converter) {
-        List<U> editedItems = items.stream().map(converter).collect(Collectors.toList());
+        List<U> editedItems = content.stream().map(converter).collect(Collectors.toList());
         return new Page<>(editedItems, numberOfPage, currentPage, numberOfElements, hasPrevious, hasNext);
     }
 
@@ -76,14 +79,14 @@ public class Page<T> implements Pageable<T> {
 
         @Override
         public boolean hasNext() {
-            return index < items.size();
+            return index < content.size();
         }
 
         @Override
         public T next() {
 
             if (this.hasNext()){
-                return items.get(index++);
+                return content.get(index++);
             }
 
             return null;

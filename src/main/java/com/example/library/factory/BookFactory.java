@@ -19,9 +19,9 @@ public class BookFactory {
         return BookDto.builder()
                 .name(book.getName())
                 .createdAt(book.getCreatedAt())
-                .authors(book.getAuthors().stream().map(authorFactory::toDto).collect(Collectors.toSet()))
+                .authors(book.getAuthors().stream().map(authorFactory::toDto).collect(Collectors.toList()))
                 .genre(genreFactory.toDto(book.getGenre()))
-                .url(urlFactory.toDto(book.getUrl()))
+                .url(book.getUrl() == null ? null : urlFactory.toDto(book.getUrl()))
                 .build();
     }
 }

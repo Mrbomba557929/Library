@@ -1,4 +1,4 @@
-package com.example.library.domain.page;
+package com.example.library.domain.auxiliary.page;
 
 import java.util.Iterator;
 import java.util.List;

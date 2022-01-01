@@ -1,4 +1,4 @@
-package com.example.library.domain.sort;
+package com.example.library.domain.auxiliary.sort;
 
 import com.example.library.domain.еnum.SortOrder;
 import lombok.Data;

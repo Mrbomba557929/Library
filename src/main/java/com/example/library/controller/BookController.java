@@ -1,9 +1,8 @@
 package com.example.library.controller;
 
-import com.example.library.domain.filter.FilterParameters;
+import com.example.library.domain.auxiliary.FilterSortRequest;
 import com.example.library.domain.model.Book;
-import com.example.library.domain.page.Pageable;
-import com.example.library.domain.sort.SortParameters;
+import com.example.library.domain.auxiliary.page.Pageable;
 import com.example.library.dto.BookDto;
 import com.example.library.factory.BookFactory;
 import com.example.library.service.BookService;
@@ -39,23 +38,14 @@ public class BookController {
     }
 
     @GetMapping(FIND_ALL_PAGINATED)
-    public ResponseEntity<?> findAll(@RequestBody(required = false) FilterParameters filterParameters,
-                                     @RequestBody(required = false) SortParameters sortParameters,
+    public ResponseEntity<?> findAll(@RequestBody(required = false) FilterSortRequest request,
                                      @RequestParam("page") int page,
                                      @RequestParam("size") int size) {
-        Pageable<Book> books;
 
-        if (Objects.nonNull(filterParameters) && Objects.nonNull(sortParameters)) {
-            books = bookService.findAll(page, size, sortParameters, filterParameters);
-        } else if (Objects.nonNull(sortParameters)) {
-            books = bookService.findAll(page, size, sortParameters);
-        } else if (Objects.nonNull(filterParameters)) {
-            books = bookService.findAll(page, size, filterParameters);
-        } else {
-            books = bookService.findAll(page, size);
-        }
+        Pageable<Book> books = Objects.isNull(request) ?
+                bookService.findAll(page, size) :
+                bookService.findAll(page, size, request.getSort(), request.getFilter());
 
         return new ResponseEntity<>(books.map(bookFactory::toDto), HttpStatus.OK);
     }
-
 }

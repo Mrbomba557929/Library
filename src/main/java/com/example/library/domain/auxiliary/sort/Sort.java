@@ -1,4 +1,4 @@
-package com.example.library.domain.sort;
+package com.example.library.domain.auxiliary.sort;
 
 import com.example.library.domain.еnum.SortOrder;
 import com.example.library.exception.NotSupportedTypeException;
@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @AllArgsConstructor
 public class Sort<T> implements Sortable<T>, Comparator<T> {

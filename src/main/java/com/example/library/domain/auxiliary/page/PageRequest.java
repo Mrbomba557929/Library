@@ -1,6 +1,6 @@
-package com.example.library.domain.page;
+package com.example.library.domain.auxiliary.page;
 
-import com.example.library.domain.sort.Sortable;
+import com.example.library.domain.auxiliary.sort.Sortable;
 import com.google.common.collect.Lists;
 import com.google.common.math.IntMath;
 
@@ -17,7 +17,7 @@ public class PageRequest<E> {
     public PageRequest(int page, int size, List<E> items) {
         this.numberOfPages = IntMath.divide(items.size(), size, RoundingMode.CEILING);
         this.page = page < 0 ? 0 : Math.min(page, numberOfPages);
-        this.size = size < 0 ? items.size() - 1 : Math.min(size, items.size() - 1);
+        this.size = size < 0 ? items.size() : Math.min(size, items.size());
         this.items = items;
     }
 

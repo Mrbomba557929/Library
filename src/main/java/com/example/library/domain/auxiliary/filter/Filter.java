@@ -1,4 +1,4 @@
-package com.example.library.domain.filter;
+package com.example.library.domain.auxiliary.filter;
 
 import com.example.library.domain.model.Author;
 import com.example.library.domain.model.Book;
@@ -20,12 +20,16 @@ public class Filter {
                 }
             }
 
-            if (Objects.nonNull(filterParameters.getGenres()) && !filterParameters.getGenres().isEmpty()) {
-                return  filterParameters.getGenres().contains(book.getGenre().getGenre());
+            if (filterParameters.getGenres().contains(book.getGenre().getGenre())) {
+                return true;
             }
 
-            return book.getCreatedAt().isAfter(filterParameters.getFrom()) &&
-                   book.getCreatedAt().isBefore(filterParameters.getTo());
+            if (Objects.nonNull(filterParameters.getFrom()) && Objects.nonNull(filterParameters.getTo())) {
+                return book.getCreatedAt().isAfter(filterParameters.getFrom()) &&
+                        book.getCreatedAt().isBefore(filterParameters.getTo());
+            }
+
+            return false;
 
         }).collect(Collectors.toList());
     }

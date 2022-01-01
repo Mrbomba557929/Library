@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -35,7 +36,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private Set<Author> authors;
+    private List<Author> authors;
 
     @JsonManagedReference
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
