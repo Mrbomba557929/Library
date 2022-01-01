@@ -16,7 +16,7 @@ public class PageRequest<E> {
 
     public PageRequest(int page, int size, List<E> items) {
         this.numberOfPages = IntMath.divide(items.size(), size, RoundingMode.CEILING);
-        this.page = page < 0 ? 0 : Math.min(page, numberOfPages);
+        this.page = page < 0 ? 0 : Math.min(page, numberOfPages - 1);
         this.size = size < 0 ? items.size() : Math.min(size, items.size());
         this.items = items;
     }

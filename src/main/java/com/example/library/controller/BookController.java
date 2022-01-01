@@ -7,6 +7,7 @@ import com.example.library.dto.BookDto;
 import com.example.library.factory.BookFactory;
 import com.example.library.service.BookService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Log4j2
 @CrossOrigin
 @RequiredArgsConstructor
 @RestController
@@ -37,14 +39,14 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping(FIND_ALL_PAGINATED)
+    @PutMapping(FIND_ALL_PAGINATED)
     public ResponseEntity<?> findAll(@RequestBody(required = false) FilterSortRequest request,
                                      @RequestParam("page") int page,
                                      @RequestParam("size") int size) {
 
         Pageable<Book> books = Objects.isNull(request) ?
-                bookService.findAll(page, size) :
-                bookService.findAll(page, size, request.getSort(), request.getFilter());
+                bookService.findAll(page - 1, size) :
+                bookService.findAll(page - 1, size, request.getSort(), request.getFilter());
 
         return new ResponseEntity<>(books.map(bookFactory::toDto), HttpStatus.OK);
     }
