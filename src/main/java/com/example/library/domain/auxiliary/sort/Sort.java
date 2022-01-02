@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @AllArgsConstructor
 public class Sort<T> implements Sortable<T>, Comparator<T> {
@@ -41,7 +40,7 @@ public class Sort<T> implements Sortable<T>, Comparator<T> {
         if (item1 instanceof String item1Str && item2 instanceof String item2Str) {
             return order.getSortOrder() * item1Str.compareToIgnoreCase(item2Str);
         } else if (item1 instanceof Number item1Num && item2 instanceof Number item2Num) {
-            return order.getSortOrder() * (item1Num.intValue() - item2Num.intValue());
+            return order.getSortOrder() * Integer.compare(item1Num.intValue(), item2Num.intValue());
         } else if (item1 instanceof Instant date1 && item2 instanceof Instant date2) {
             return order.getSortOrder() * date1.compareTo(date2);
         }
@@ -53,8 +52,8 @@ public class Sort<T> implements Sortable<T>, Comparator<T> {
         return items.stream().sorted((item1, item2) -> {
             try {
 
-                Object value1 = ReflectionUtil.retrieveFieldOfObject(item1, this.key);
-                Object value2 = ReflectionUtil.retrieveFieldOfObject(item2, this.key);
+                Object value1 = ReflectionUtil.retrieveFieldOfObject(item1, key);
+                Object value2 = ReflectionUtil.retrieveFieldOfObject(item2, key);
 
                 return compare(value1, value2);
 
@@ -75,20 +74,7 @@ public class Sort<T> implements Sortable<T>, Comparator<T> {
                 Object innerEntity2 = ReflectionUtil.retrieveFieldOfObject(item2, key);
 
                 if (innerEntity1 instanceof List list1 && innerEntity2 instanceof List list2) {
-
-                    if (list1.isEmpty() || list2.isEmpty()) {
-
-                        if (list1.isEmpty() && list2.isEmpty()) {
-                            return 0;
-                        }
-
-                        return list1.size() == 0 ? -1 : 1;
-                    }
-
-                    Object valueFieldInnerEntity1 = ReflectionUtil.retrieveFieldOfObject(list1.get(0), keyInnerEntity);
-                    Object valueFieldInnerEntity2 = ReflectionUtil.retrieveFieldOfObject(list2.get(0), keyInnerEntity);
-
-                    return compare(valueFieldInnerEntity1, valueFieldInnerEntity2);
+                    return compareFirstElementsInLists(list1, list2);
                 }
 
                 Object valueFieldInnerEntity1 = ReflectionUtil.retrieveFieldOfObject(innerEntity1, keyInnerEntity);
@@ -103,5 +89,22 @@ public class Sort<T> implements Sortable<T>, Comparator<T> {
             return 0;
 
         }).toList();
+    }
+
+    private int compareFirstElementsInLists(List list1, List list2) throws NoSuchFieldException, IllegalAccessException {
+
+        if (list1.isEmpty() || list2.isEmpty()) {
+
+            if (list1.isEmpty() && list2.isEmpty()) {
+                return 0;
+            }
+
+            return list1.size() == 0 ? -1 : 1;
+        }
+
+        Object valueFieldInnerEntity1 = ReflectionUtil.retrieveFieldOfObject(list1.get(0), keyInnerEntity);
+        Object valueFieldInnerEntity2 = ReflectionUtil.retrieveFieldOfObject(list2.get(0), keyInnerEntity);
+
+        return compare(valueFieldInnerEntity1, valueFieldInnerEntity2);
     }
 }

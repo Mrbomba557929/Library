@@ -6,6 +6,12 @@ import lombok.Data;
 
 @Data
 public class FilterSortRequest {
+
     private FilterParameters filter;
     private SortParameters sort;
+
+    public FilterSortRequest() {
+        filter = new FilterParameters();
+        sort = new SortParameters();
+    }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 public class FilterParameters {
@@ -17,5 +18,12 @@ public class FilterParameters {
     public FilterParameters() {
         authors = new ArrayList<>();
         genres = new ArrayList<>();
+    }
+
+    public boolean isEmpty() {
+        return authors.isEmpty() &&
+               genres.isEmpty() &&
+               Objects.isNull(from) &&
+               Objects.isNull(to);
     }
 }

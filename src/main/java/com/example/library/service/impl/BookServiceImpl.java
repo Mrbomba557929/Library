@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -35,11 +34,11 @@ public class BookServiceImpl implements BookService {
     public Pageable<Book> findAll(int page, int count, SortParameters sortParameters, FilterParameters filterParameters) {
         List<Book> books = bookRepository.findAll();
 
-        if (Objects.nonNull(filterParameters)) {
+        if (!filterParameters.isEmpty()) {
             books = Filter.filterBy(filterParameters, books);
         }
 
-        if (Objects.nonNull(sortParameters)) {
+        if (!sortParameters.isEmpty()) {
             return PageRequest.of(page, count, books, Sort.by(sortParameters));
         }
 

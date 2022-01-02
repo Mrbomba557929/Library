@@ -34,5 +34,4 @@ public class AuthorController {
 
         return new ResponseEntity<>(authorDtos, HttpStatus.OK);
     }
-
 }

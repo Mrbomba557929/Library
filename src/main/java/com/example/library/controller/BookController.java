@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private static final String FIND_ALL = "/books";
-    private static final String FIND_ALL_PAGINATED = "/books/paginated";
+    private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
 
     private final BookService bookService;
     private final BookFactory bookFactory;
@@ -39,8 +39,8 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @PutMapping(FIND_ALL_PAGINATED)
-    public ResponseEntity<?> findAll(@RequestBody(required = false) FilterSortRequest request,
+    @PutMapping(PAGINATE_ALL_BOOKS)
+    public ResponseEntity<?> paginate(@RequestBody(required = false) FilterSortRequest request,
                                      @RequestParam("page") int page,
                                      @RequestParam("size") int size) {
 
