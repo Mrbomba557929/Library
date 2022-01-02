@@ -10,14 +10,22 @@ import java.util.List;
 public interface BookService {
 
     /**
-     * Method designed to find all a {@link Book} entities.
+     * Method to find by id the {@link Book} entity.
+     *
+     * @param id - the id of the {@link Book} entity.
+     * @return founded the {@link Book} entity.
+     */
+    Book findById(Long id);
+
+    /**
+     * Method to find all a {@link Book} entities.
      *
      * @return list of a {@link Book} entities on page.
      */
     List<Book> findAll();
 
     /**
-     * Method designed to find all a {@link Book} entities.
+     * Method to find all a {@link Book} entities.
      *
      * @param page - current number of page.
      * @param count - count of elements on page.
@@ -26,7 +34,7 @@ public interface BookService {
     Pageable<Book> findAll(int page, int count);
 
     /**
-     * Method designed to find all a {@link Book} entities.
+     * Method to find all a {@link Book} entities.
      *
      * @param page - current number of page.
      * @param count - count of elements on page.
@@ -35,4 +43,12 @@ public interface BookService {
      * @return list of a {@link Book} entities on page.
      */
     Pageable<Book> findAll(int page, int count, SortParameters sortParameters, FilterParameters filterParameters);
+
+    /**
+     * Method to save the {@link Book} entity.
+     *
+     * @param book - the {@link Book} entity.
+     * @return saved the {@link Book} entity.
+     */
+    Book save(Book book);
 }

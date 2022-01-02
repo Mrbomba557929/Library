@@ -15,4 +15,12 @@ public interface GenreService {
      * @return list of the {@link Genre} entities.
      */
     List<Genre> findAll();
+
+    /**
+     * Method to save the {@link Genre} entity.
+     *
+     * @param genre - the {@link Genre} entity.
+     * @return saved the {@link Genre} entity.
+     */
+    Genre save(Genre genre);
 }

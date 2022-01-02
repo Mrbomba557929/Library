@@ -3,7 +3,7 @@ package com.example.library.domain.auxiliary.filter;
 import com.example.library.domain.model.Author;
 import com.example.library.domain.model.Book;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public class Filter {
         return genres.contains(book.getGenre().getGenre());
     }
 
-    private static boolean checkTimes(Book book, Instant from, Instant to) {
+    private static boolean checkTimes(Book book, LocalDate from, LocalDate to) {
 
         if (Objects.nonNull(from) && Objects.nonNull(to)) {
             return book.getCreatedAt().isAfter(from) && book.getCreatedAt().isBefore(to);

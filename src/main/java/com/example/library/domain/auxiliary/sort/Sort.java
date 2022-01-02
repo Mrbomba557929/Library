@@ -6,6 +6,7 @@ import com.example.library.util.ReflectionUtil;
 import lombok.AllArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -41,11 +42,11 @@ public class Sort<T> implements Sortable<T>, Comparator<T> {
             return order.getSortOrder() * item1Str.compareToIgnoreCase(item2Str);
         } else if (item1 instanceof Number item1Num && item2 instanceof Number item2Num) {
             return order.getSortOrder() * Integer.compare(item1Num.intValue(), item2Num.intValue());
-        } else if (item1 instanceof Instant date1 && item2 instanceof Instant date2) {
+        } else if (item1 instanceof LocalDate date1 && item2 instanceof LocalDate date2) {
             return order.getSortOrder() * date1.compareTo(date2);
         }
 
-        throw new NotSupportedTypeException("Error: data type only supported 'String', 'Number' or 'Instant'");
+        throw new NotSupportedTypeException("Error: data type only supported 'String', 'Number' or 'LocalDate'");
     }
 
     protected List<T> sortByKeyEntity(List<T> items) {

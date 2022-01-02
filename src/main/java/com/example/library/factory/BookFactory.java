@@ -24,4 +24,14 @@ public class BookFactory {
                 .url(book.getUrl() == null ? null : urlFactory.toDto(book.getUrl()))
                 .build();
     }
+
+    public Book toEntity(BookDto bookDto) {
+        return Book.builder()
+                .name(bookDto.getName())
+                .createdAt(bookDto.getCreatedAt())
+                .authors(bookDto.getAuthors().stream().map(authorFactory::toEntity).collect(Collectors.toList()))
+                .genre(genreFactory.toEntity(bookDto.getGenre()))
+                .url(bookDto.getUrl() == null ? null : urlFactory.toEntity(bookDto.getUrl()))
+                .build();
+    }
 }

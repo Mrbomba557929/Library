@@ -13,4 +13,11 @@ public class AuthorFactory {
                 .lastName(author.getLastName())
                 .build();
     }
+
+    public Author toEntity(AuthorDto authorDto) {
+        return Author.builder()
+                .firstName(authorDto.getFirstName())
+                .lastName(authorDto.getLastName())
+                .build();
+    }
 }

@@ -21,4 +21,10 @@ public class GenreServiceImpl implements GenreService {
     public List<Genre> findAll() {
         return genreRepository.findAll();
     }
+
+    @Override
+    public Genre save(Genre genre) {
+        return genreRepository.findByGenre(genre.getGenre())
+                .orElseGet(() -> genreRepository.save(genre));
+    }
 }

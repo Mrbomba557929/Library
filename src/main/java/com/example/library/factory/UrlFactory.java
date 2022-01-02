@@ -12,4 +12,10 @@ public class UrlFactory {
                 .url(url.getUrl())
                 .build();
     }
+
+    public Url toEntity(UrlDto urlDto) {
+        return Url.builder()
+                .url(urlDto.getUrl())
+                .build();
+    }
 }

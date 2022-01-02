@@ -1,8 +1,9 @@
 package com.example.library.domain.auxiliary.filter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,8 +13,12 @@ public class FilterParameters {
 
     private List<String> authors;
     private List<String> genres;
-    private Instant from;
-    private Instant to;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate from;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate to;
 
     public FilterParameters() {
         authors = new ArrayList<>();

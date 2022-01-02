@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class BookController {
 
     private static final String FIND_ALL = "/books";
     private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
+    private static final String ADD_BOOK = "/books/add";
 
     private final BookService bookService;
     private final BookFactory bookFactory;
@@ -39,10 +41,16 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
+    @PostMapping(ADD_BOOK)
+    public ResponseEntity<?> addBook(@Validated @RequestBody BookDto bookDto) {
+        Book book = bookFactory.toEntity(bookDto);
+        return new ResponseEntity<>(bookFactory.toDto(bookService.save(book)), HttpStatus.OK);
+    }
+
     @PutMapping(PAGINATE_ALL_BOOKS)
     public ResponseEntity<?> paginate(@RequestBody(required = false) FilterSortRequest request,
-                                     @RequestParam("page") int page,
-                                     @RequestParam("size") int size) {
+                                      @RequestParam("page") int page,
+                                      @RequestParam("size") int size) {
 
         Pageable<Book> books = Objects.isNull(request) ?
                 bookService.findAll(page - 1, size) :

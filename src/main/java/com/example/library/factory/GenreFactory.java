@@ -12,4 +12,10 @@ public class GenreFactory {
                 .genre(genre.getGenre())
                 .build();
     }
+
+    public Genre toEntity(GenreDto genreDto) {
+        return Genre.builder()
+                .genre(genreDto.getGenre())
+                .build();
+    }
 }
