@@ -9,10 +9,7 @@ import com.example.library.domain.auxiliary.sort.Sort;
 import com.example.library.domain.auxiliary.sort.SortParameters;
 import com.example.library.exception.NotFoundBookException;
 import com.example.library.repository.BookRepository;
-import com.example.library.service.AuthorService;
 import com.example.library.service.BookService;
-import com.example.library.service.GenreService;
-import com.example.library.service.UrlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +19,6 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final UrlService urlService;
-    private final AuthorService authorService;
-    private final GenreService genreService;
     private final BookRepository bookRepository;
 
     @Override
@@ -61,5 +55,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book save(Book book) {
         return bookRepository.save(book);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
     }
 }

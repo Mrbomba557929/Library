@@ -27,6 +27,7 @@ public class BookController {
     private static final String FIND_ALL = "/books";
     private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
     private static final String ADD_BOOK = "/books/add";
+    private static final String DELETE_BY_ID = "/books";
 
     private final BookService bookService;
     private final BookFactory bookFactory;
@@ -45,6 +46,12 @@ public class BookController {
     public ResponseEntity<?> addBook(@Validated @RequestBody BookDto bookDto) {
         Book book = bookFactory.toEntity(bookDto);
         return new ResponseEntity<>(bookFactory.toDto(bookService.save(book)), HttpStatus.OK);
+    }
+
+    @DeleteMapping(DELETE_BY_ID)
+    public ResponseEntity<?> deleteById(@RequestParam("id") Long id) {
+        bookService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(PAGINATE_ALL_BOOKS)

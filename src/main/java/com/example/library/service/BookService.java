@@ -51,4 +51,11 @@ public interface BookService {
      * @return saved the {@link Book} entity.
      */
     Book save(Book book);
+
+    /**
+     * Method to delete the {@link Book} by id.
+     *
+     * @param id - the id of the {@link Book} entity.
+     */
+    void deleteById(Long id);
 }
