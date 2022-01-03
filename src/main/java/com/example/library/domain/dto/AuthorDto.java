@@ -1,4 +1,4 @@
-package com.example.library.dto;
+package com.example.library.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UrlDto {
-    private String url;
+public class AuthorDto {
+    private String firstName;
+    private String lastName;
 }

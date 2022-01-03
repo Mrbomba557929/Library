@@ -1,9 +1,8 @@
 package com.example.library.service;
 
-import com.example.library.domain.auxiliary.filter.FilterParameters;
+import com.example.library.specification.GenericFilterParameters;
 import com.example.library.domain.model.Book;
-import com.example.library.domain.auxiliary.page.Pageable;
-import com.example.library.domain.auxiliary.sort.SortParameters;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -29,20 +28,11 @@ public interface BookService {
      *
      * @param page - current number of page.
      * @param count - count of elements on page.
+     * @param sort - values to sort.
+     * @param filter - values to filter
      * @return list of a {@link Book} entities on page.
      */
-    Pageable<Book> findAll(int page, int count);
-
-    /**
-     * Method to find all a {@link Book} entities.
-     *
-     * @param page - current number of page.
-     * @param count - count of elements on page.
-     * @param sortParameters - values to sort.
-     * @param filterParameters - values to filter
-     * @return list of a {@link Book} entities on page.
-     */
-    Pageable<Book> findAll(int page, int count, SortParameters sortParameters, FilterParameters filterParameters);
+    Page<Book> findAll(int page, int count, String sort, GenericFilterParameters genericFilterParameters);
 
     /**
      * Method to save the {@link Book} entity.

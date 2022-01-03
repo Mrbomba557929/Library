@@ -1,7 +1,7 @@
 package com.example.library.factory;
 
 import com.example.library.domain.model.Author;
-import com.example.library.dto.AuthorDto;
+import com.example.library.domain.dto.AuthorDto;
 import org.springframework.stereotype.Component;
 
 @Component

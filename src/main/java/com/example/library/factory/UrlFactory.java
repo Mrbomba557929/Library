@@ -1,7 +1,7 @@
 package com.example.library.factory;
 
 import com.example.library.domain.model.Url;
-import com.example.library.dto.UrlDto;
+import com.example.library.domain.dto.UrlDto;
 import org.springframework.stereotype.Component;
 
 @Component

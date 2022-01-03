@@ -1,5 +1,6 @@
 package com.example.library.exception.handler;
 
+import com.example.library.exception.IllegalStateFilterException;
 import com.example.library.exception.NotSupportedTypeException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,8 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({NotSupportedTypeException.class})
-    public ResponseEntity<?> handleNotSupportedTypeException(NotSupportedTypeException e) {
+    @ExceptionHandler({NotSupportedTypeException.class, IllegalStateFilterException.class})
+    public ResponseEntity<?> handleNotSupportedTypeException(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 

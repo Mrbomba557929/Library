@@ -1,16 +1,17 @@
 package com.example.library.service.impl;
 
-import com.example.library.domain.auxiliary.filter.Filter;
-import com.example.library.domain.auxiliary.filter.FilterParameters;
+import com.example.library.specification.GenericFilterParameters;
 import com.example.library.domain.model.Book;
-import com.example.library.domain.auxiliary.page.PageRequest;
-import com.example.library.domain.auxiliary.page.Pageable;
-import com.example.library.domain.auxiliary.sort.Sort;
-import com.example.library.domain.auxiliary.sort.SortParameters;
 import com.example.library.exception.NotFoundBookException;
 import com.example.library.repository.BookRepository;
 import com.example.library.service.BookService;
+import com.example.library.specification.GenericFilter;
+import com.example.library.specification.GenericSpecificationsBuilder;
+import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final GenericFilter<Book> genericFilter;
 
     @Override
     public Book findById(Long id) {
@@ -33,23 +35,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Pageable<Book> findAll(int page, int count) {
-        return PageRequest.of(page, count, bookRepository.findAll());
-    }
+    public Page<Book> findAll(int page, int size, String sort, GenericFilterParameters genericFilterParameters) {
 
-    @Override
-    public Pageable<Book> findAll(int page, int count, SortParameters sortParameters, FilterParameters filterParameters) {
-        List<Book> books = bookRepository.findAll();
+        GenericSpecificationsBuilder<Book> builder = genericFilter.filterBy(genericFilterParameters);
 
-        if (!filterParameters.isEmpty()) {
-            books = Filter.filterBy(filterParameters, books);
+        if (!Strings.isNullOrEmpty(sort)) {
+            String[] parameters = sort.split("\\s*,\\s*");
+            Sort.Direction direction = Sort.Direction.fromString(parameters[1]);
+            return bookRepository.findAll(builder.build(), PageRequest.of(page, size, Sort.by(direction, parameters[0])));
         }
 
-        if (!sortParameters.isEmpty()) {
-            return PageRequest.of(page, count, books, Sort.by(sortParameters));
-        }
-
-        return PageRequest.of(page, count, books);
+        return bookRepository.findAll(builder.build(), PageRequest.of(page, size));
     }
 
     @Override

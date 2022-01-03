@@ -1,7 +1,7 @@
 package com.example.library.factory;
 
 import com.example.library.domain.model.Book;
-import com.example.library.dto.BookDto;
+import com.example.library.domain.dto.BookDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
