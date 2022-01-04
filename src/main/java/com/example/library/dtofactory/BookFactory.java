@@ -1,4 +1,4 @@
-package com.example.library.factory;
+package com.example.library.dtofactory;
 
 import com.example.library.domain.model.Book;
 import com.example.library.domain.dto.BookDto;

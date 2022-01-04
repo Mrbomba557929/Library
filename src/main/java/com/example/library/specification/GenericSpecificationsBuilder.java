@@ -1,19 +1,39 @@
 package com.example.library.specification;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@RequiredArgsConstructor
 public class GenericSpecificationsBuilder<T> {
 
-    private List<SearchCriteria> params;
-    private List<Specification<T>> specifications;
+    private final List<SearchCriteria> params;
+    private final List<Specification<T>> specifications;
+
+    public GenericSpecificationsBuilder() {
+        params = new ArrayList<>();
+        specifications = new ArrayList<>();
+    }
 
     public final GenericSpecificationsBuilder<T> with(String key, SearchOperation searchOperation, List<?> arguments) {
-        params.add(new SearchCriteria(key, searchOperation,arguments));
+        SearchCriteria searchCriteria = SearchCriteria.builder()
+                        .key(key)
+                        .operation(searchOperation)
+                        .arguments(arguments)
+                        .build();
+        params.add(searchCriteria);
+        return this;
+    }
+
+    public final GenericSpecificationsBuilder<T> with(String key, String keyInnerEntity, SearchOperation searchOperation, List<?> arguments) {
+        SearchCriteria searchCriteria = SearchCriteria.builder()
+                .key(key)
+                .keyInnerEntity(keyInnerEntity)
+                .operation(searchOperation)
+                .arguments(arguments)
+                .build();
+        params.add(searchCriteria);
         return this;
     }
 

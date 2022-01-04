@@ -1,4 +1,4 @@
-package com.example.library.factory;
+package com.example.library.dtofactory;
 
 import com.example.library.domain.model.Genre;
 import com.example.library.domain.dto.GenreDto;

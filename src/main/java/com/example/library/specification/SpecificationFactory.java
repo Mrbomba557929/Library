@@ -10,7 +10,12 @@ public class SpecificationFactory<T> {
 
     public Specification<T> isEqual(String key, List<?> arguments) {
         GenericSpecificationsBuilder<T> builder = new GenericSpecificationsBuilder<>();
-        return builder.with(key, SearchOperation.EQUALITY, arguments).build();
+        return builder.with(key, SearchOperation.EQUALLY, arguments).build();
+    }
+
+    public Specification<T> isEqual(String key, String keyInnerEntity, List<?> arguments) {
+        GenericSpecificationsBuilder<T> builder = new GenericSpecificationsBuilder<>();
+        return builder.with(key, keyInnerEntity, SearchOperation.EQUALLY, arguments).build();
     }
 
     public Specification<T> greaterThanOrEqually(String key, List<?> arguments) {

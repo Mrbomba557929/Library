@@ -1,5 +1,6 @@
 package com.example.library.exception.handler;
 
+import com.example.library.exception.ApplicationException;
 import com.example.library.exception.IllegalStateFilterException;
 import com.example.library.exception.NotSupportedTypeException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -13,9 +14,11 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({NotSupportedTypeException.class, IllegalStateFilterException.class})
-    public ResponseEntity<?> handleNotSupportedTypeException(RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    @ExceptionHandler({ApplicationException.class})
+    public ResponseEntity<?> handleNotSupportedTypeException(ApplicationException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(e.getMessage());
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
@@ -26,6 +29,8 @@ public class GlobalExceptionHandler {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
 
-        return ResponseEntity.badRequest().body(errors);
+        return ResponseEntity
+                .badRequest()
+                .body(errors);
     }
 }

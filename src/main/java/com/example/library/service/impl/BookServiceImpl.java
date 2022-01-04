@@ -1,5 +1,7 @@
 package com.example.library.service.impl;
 
+import com.example.library.exception.factory.ErrorFactory;
+import com.example.library.exception.еnum.ErrorMessage;
 import com.example.library.specification.GenericFilterParameters;
 import com.example.library.domain.model.Book;
 import com.example.library.exception.NotFoundBookException;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +29,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new NotFoundBookException("Error: Book not found!"));
+                .orElseThrow(() -> ErrorFactory.exceptionBuilder(ErrorMessage.NOT_FOUND_BOOK)
+                        .status(HttpStatus.NOT_FOUND)
+                        .build(NotFoundBookException.class));
     }
 
     @Override

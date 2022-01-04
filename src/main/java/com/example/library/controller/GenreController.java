@@ -1,7 +1,7 @@
 package com.example.library.controller;
 
 import com.example.library.domain.dto.GenreDto;
-import com.example.library.factory.GenreFactory;
+import com.example.library.dtofactory.GenreFactory;
 import com.example.library.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

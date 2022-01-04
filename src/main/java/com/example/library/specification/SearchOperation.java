@@ -1,7 +1,7 @@
 package com.example.library.specification;
 
 public enum SearchOperation {
-    EQUALITY,
+    EQUALLY,
     NEGATION,
     GREATER_THAN,
     LESS_THAN,

@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchCriteria {
     private String key;
+    private String keyInnerEntity;
     private SearchOperation operation;
     private List<?> arguments;
 }
