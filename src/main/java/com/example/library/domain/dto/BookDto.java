@@ -18,6 +18,8 @@ import java.util.List;
 @Data
 public class BookDto {
 
+    private Long id;
+
     @NotBlank(message = "Error: Name cannot be empty!")
     @Size(max = 255, message = "Error: Name can be maximum 255 characters!")
     private String name;

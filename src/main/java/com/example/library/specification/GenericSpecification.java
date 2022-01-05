@@ -54,6 +54,9 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
             case LESS_THAN_OR_EQUALLY -> {
                 return cb.lessThanOrEqualTo(path, arg);
             }
+            case LIKE -> {
+                return cb.like(path, (String) arg);
+            }
         }
 
         throw ErrorFactory.exceptionBuilder(ErrorMessage.SEARCH_OPERATION_NOT_SUPPORTED)

@@ -17,6 +17,7 @@ public class BookFactory {
 
     public BookDto toDto(Book book) {
         return BookDto.builder()
+                .id(book.getId())
                 .name(book.getName())
                 .createdAt(book.getCreatedAt())
                 .authors(book.getAuthors().stream().map(authorFactory::toDto).collect(Collectors.toList()))

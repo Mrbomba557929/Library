@@ -12,4 +12,5 @@ public class GenericFilterParameters {
     private String[] genres;
     private LocalDate from;
     private LocalDate to;
+    private String search;
 }

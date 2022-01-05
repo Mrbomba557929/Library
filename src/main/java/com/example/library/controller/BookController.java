@@ -45,14 +45,15 @@ public class BookController {
     }
 
     @GetMapping(PAGINATE_ALL_BOOKS)
-    public ResponseEntity<?> findAll(@RequestParam(name = "authors", required = false) String authors,
+    public ResponseEntity<?> findAll(@RequestParam(name = "sort", required = false) String sort,
+                                     @RequestParam(name = "authors", required = false) String authors,
                                      @RequestParam(name = "genres", required = false) String genres,
                                      @RequestParam(name = "from", required = false) LocalDate from,
                                      @RequestParam(name = "to", required = false) LocalDate to,
-                                     @RequestParam(name = "sort", required = false) String sort,
+                                     @RequestParam(name = "search", required = false, defaultValue = "") String search,
                                      @RequestParam("page") int page,
                                      @RequestParam("count") int count) {
-        GenericFilterParameters genericFilterParameters = specificationParameterFactory.toFilterParameters(authors, genres, from, to);
+        GenericFilterParameters genericFilterParameters = specificationParameterFactory.toFilterParameters(authors, genres, from, to, search);
         Page<BookDto> books = bookService.findAll(page, count, sort, genericFilterParameters).map(bookFactory::toDto);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }

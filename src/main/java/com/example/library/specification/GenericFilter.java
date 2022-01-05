@@ -36,6 +36,7 @@ public class GenericFilter<T> {
                         case "genres" -> builder.with(specificationFactory.isEqual("genre", "genre", Arrays.asList((String[]) valueField)));
                         case "from" -> builder.with(specificationFactory.greaterThanOrEqually("createdAt", Collections.singletonList(valueField)));
                         case "to" -> builder.with(specificationFactory.lessThanOrEqually("createdAt", Collections.singletonList(valueField)));
+                        case "search" -> builder.with(specificationFactory.like("name", Collections.singletonList("%" + valueField + "%")));
                     }
                 }
             }
