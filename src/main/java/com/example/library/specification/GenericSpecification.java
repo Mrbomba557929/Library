@@ -15,7 +15,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class GenericSpecification<T> implements Specification<T> {
 
-    private final SearchCriteria searchCriteria;
+    private final SpecificationCriteria specificationCriteria;
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -23,13 +23,13 @@ public class GenericSpecification<T> implements Specification<T> {
         List<Predicate> predicates = new ArrayList<>();
         query.distinct(true);
 
-        if (Objects.nonNull(searchCriteria.getKeyInnerEntity())) {
-            Join<Object, Object> joinParent = root.join(searchCriteria.getKey());
-            searchCriteria.getArguments().forEach(arg ->
-                    predicates.add(generatePredicate(searchCriteria.getKeyInnerEntity(), arg, joinParent, criteriaBuilder)));
+        if (Objects.nonNull(specificationCriteria.getKeyInnerEntity())) {
+            Join<Object, Object> joinParent = root.join(specificationCriteria.getKey());
+            specificationCriteria.getArguments().forEach(arg ->
+                    predicates.add(generatePredicate(specificationCriteria.getKeyInnerEntity(), arg, joinParent, criteriaBuilder)));
         } else {
-            searchCriteria.getArguments().forEach(arg ->
-                    predicates.add(generatePredicate(searchCriteria.getKey(), arg, root, criteriaBuilder)));
+            specificationCriteria.getArguments().forEach(arg ->
+                    predicates.add(generatePredicate(specificationCriteria.getKey(), arg, root, criteriaBuilder)));
         }
 
         return criteriaBuilder.or(predicates.toArray(Predicate[]::new));
@@ -37,7 +37,7 @@ public class GenericSpecification<T> implements Specification<T> {
 
     private Predicate generatePredicate(String key, Object arg, From<?, ?> root, CriteriaBuilder criteriaBuilder) {
 
-        switch (searchCriteria.getOperation()) {
+        switch (specificationCriteria.getOperation()) {
             case EQUALLY -> {
                 return criteriaBuilder.equal(root.get(key), arg);
             }

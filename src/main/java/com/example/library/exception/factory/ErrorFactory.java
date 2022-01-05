@@ -16,12 +16,10 @@ public class ErrorFactory {
     }
 
     public static class Builder {
-
         private HttpStatus status;
         private int code;
         private String link;
         private String developerMessage;
-
         private final String message;
 
         public Builder(ErrorMessage errorCode) {

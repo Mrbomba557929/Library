@@ -2,6 +2,7 @@ package com.example.library.service.impl;
 
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.exception.еnum.ErrorMessage;
+import com.example.library.sort.CustomSort;
 import com.example.library.specification.GenericFilterParameters;
 import com.example.library.domain.model.Book;
 import com.example.library.exception.NotFoundBookException;
@@ -25,6 +26,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final GenericFilter<Book> genericFilter;
+    private final CustomSort<Book> customSort;
 
     @Override
     public Book findById(Long id) {
@@ -40,13 +42,18 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> findAll(int page, int size, String sort, GenericFilterParameters genericFilterParameters) {
-
-        GenericSpecificationsBuilder<Book> builder = genericFilter.filterBy(genericFilterParameters);
+    public Page<Book> findAll(int page, int size, String sort, GenericFilterParameters filterParameters) {
+        GenericSpecificationsBuilder<Book> builder = genericFilter.filterBy(filterParameters);
 
         if (!Strings.isNullOrEmpty(sort)) {
             String[] parameters = sort.split("\\s*,\\s*");
             Sort.Direction direction = Sort.Direction.fromString(parameters[1]);
+
+            if (parameters[0].equalsIgnoreCase("authors")) {
+                Page<Book> books = bookRepository.findAll(builder.build(), PageRequest.of(page, size));
+                return customSort.sort(books, direction, "authors", "firstName");
+            }
+
             return bookRepository.findAll(builder.build(), PageRequest.of(page, size, Sort.by(direction, parameters[0])));
         }
 

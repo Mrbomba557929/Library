@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Component
-public class FilterFactory {
+public class SpecificationParameterFactory {
 
     public GenericFilterParameters toFilterParameters(String authors, String genres, LocalDate from, LocalDate to) {
         return GenericFilterParameters.builder()

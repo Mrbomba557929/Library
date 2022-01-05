@@ -32,7 +32,7 @@ public interface BookService {
      * @param filter - values to filter
      * @return list of a {@link Book} entities on page.
      */
-    Page<Book> findAll(int page, int count, String sort, GenericFilterParameters genericFilterParameters);
+    Page<Book> findAll(int page, int count, String sort, GenericFilterParameters filter);
 
     /**
      * Method to save the {@link Book} entity.

@@ -1,6 +1,6 @@
 package com.example.library.specification;
 
-public enum SearchOperation {
+public enum SpecificationOperation {
     EQUALLY,
     NEGATION,
     GREATER_THAN,
@@ -8,5 +8,6 @@ public enum SearchOperation {
     LIKE,
     STARTS_WITH,
     GREATER_THAN_OR_EQUALLY,
-    LESS_THAN_OR_EQUALLY
+    LESS_THAN_OR_EQUALLY,
+    ORDERED_BY
 }

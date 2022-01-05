@@ -11,9 +11,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchCriteria {
+public class SpecificationCriteria {
     private String key;
     private String keyInnerEntity;
-    private SearchOperation operation;
+    private SpecificationOperation operation;
     private List<?> arguments;
 }

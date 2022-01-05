@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class GenericSpecificationsBuilder<T> {
 
-    private final List<SearchCriteria> params;
+    private final List<SpecificationCriteria> params;
     private final List<Specification<T>> specifications;
 
     public GenericSpecificationsBuilder() {
@@ -16,24 +16,24 @@ public class GenericSpecificationsBuilder<T> {
         specifications = new ArrayList<>();
     }
 
-    public final GenericSpecificationsBuilder<T> with(String key, SearchOperation searchOperation, List<?> arguments) {
-        SearchCriteria searchCriteria = SearchCriteria.builder()
+    public final GenericSpecificationsBuilder<T> with(String key, SpecificationOperation specificationOperation, List<?> arguments) {
+        SpecificationCriteria specificationCriteria = SpecificationCriteria.builder()
                         .key(key)
-                        .operation(searchOperation)
+                        .operation(specificationOperation)
                         .arguments(arguments)
                         .build();
-        params.add(searchCriteria);
+        params.add(specificationCriteria);
         return this;
     }
 
-    public final GenericSpecificationsBuilder<T> with(String key, String keyInnerEntity, SearchOperation searchOperation, List<?> arguments) {
-        SearchCriteria searchCriteria = SearchCriteria.builder()
+    public final GenericSpecificationsBuilder<T> with(String key, String keyInnerEntity, SpecificationOperation specificationOperation, List<?> arguments) {
+        SpecificationCriteria specificationCriteria = SpecificationCriteria.builder()
                 .key(key)
                 .keyInnerEntity(keyInnerEntity)
-                .operation(searchOperation)
+                .operation(specificationOperation)
                 .arguments(arguments)
                 .build();
-        params.add(searchCriteria);
+        params.add(specificationCriteria);
         return this;
     }
 

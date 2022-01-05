@@ -4,7 +4,7 @@ import com.example.library.specification.GenericFilterParameters;
 import com.example.library.domain.model.Book;
 import com.example.library.domain.dto.BookDto;
 import com.example.library.dtofactory.BookFactory;
-import com.example.library.dtofactory.FilterFactory;
+import com.example.library.dtofactory.SpecificationParameterFactory;
 import com.example.library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,7 +32,7 @@ public class BookController {
 
     private final BookService bookService;
     private final BookFactory bookFactory;
-    private final FilterFactory filterFactory;
+    private final SpecificationParameterFactory specificationParameterFactory;
 
     @GetMapping(FIND_ALL)
     public ResponseEntity<?> findAll() {
@@ -52,7 +52,7 @@ public class BookController {
                                      @RequestParam(name = "sort", required = false) String sort,
                                      @RequestParam("page") int page,
                                      @RequestParam("size") int size) {
-        GenericFilterParameters genericFilterParameters = filterFactory.toFilterParameters(authors, genres, from, to);
+        GenericFilterParameters genericFilterParameters = specificationParameterFactory.toFilterParameters(authors, genres, from, to);
         Page<BookDto> books = bookService.findAll(page, size, sort, genericFilterParameters).map(bookFactory::toDto);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
