@@ -32,7 +32,7 @@ public class GenericFilter<T> {
 
                 if (Objects.nonNull(valueField)) {
                     switch (field.getName()) {
-                        case "authors" -> builder.with(specificationFactory.isEqual("authors", "firstName", Arrays.asList((String[]) valueField)));
+                        case "authors" -> builder.with(specificationFactory.isEqual("authors", "fio", Arrays.asList((String[]) valueField)));
                         case "genres" -> builder.with(specificationFactory.isEqual("genre", "genre", Arrays.asList((String[]) valueField)));
                         case "from" -> builder.with(specificationFactory.greaterThanOrEqually("createdAt", Collections.singletonList(valueField)));
                         case "to" -> builder.with(specificationFactory.lessThanOrEqually("createdAt", Collections.singletonList(valueField)));

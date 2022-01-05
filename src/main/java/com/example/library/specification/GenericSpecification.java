@@ -3,7 +3,6 @@ package com.example.library.specification;
 import com.example.library.exception.SearchOperationNotSupportedException;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.exception.еnum.ErrorMessage;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 
@@ -12,40 +11,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@RequiredArgsConstructor
-public class GenericSpecification<T> implements Specification<T> {
-
-    private final SpecificationCriteria specificationCriteria;
+public record GenericSpecification<T>(SpecificationCriteria specificationCriteria) implements Specification<T> {
 
     @Override
-    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
         List<Predicate> predicates = new ArrayList<>();
         query.distinct(true);
 
+        Expression<?> expression;
+
         if (Objects.nonNull(specificationCriteria.getKeyInnerEntity())) {
+
             Join<Object, Object> joinParent = root.join(specificationCriteria.getKey());
-            specificationCriteria.getArguments().forEach(arg ->
-                    predicates.add(generatePredicate(specificationCriteria.getKeyInnerEntity(), arg, joinParent, criteriaBuilder)));
+
+            if (specificationCriteria.getKeyInnerEntity().equalsIgnoreCase("fio")) {
+                expression = cb.concat(cb.concat(joinParent.get("firstName"), " "), joinParent.get("lastName"));
+            } else {
+                expression = joinParent.get(specificationCriteria.getKeyInnerEntity());
+            }
+
         } else {
-            specificationCriteria.getArguments().forEach(arg ->
-                    predicates.add(generatePredicate(specificationCriteria.getKey(), arg, root, criteriaBuilder)));
+            expression = root.get(specificationCriteria.getKey());
         }
 
-        return criteriaBuilder.or(predicates.toArray(Predicate[]::new));
+        for (Object arg : specificationCriteria.getArguments()) {
+            predicates.add(generatePredicate(expression, (Comparable<?>) arg, cb));
+        }
+
+        return cb.or(predicates.toArray(Predicate[]::new));
     }
 
-    private Predicate generatePredicate(String key, Object arg, From<?, ?> root, CriteriaBuilder criteriaBuilder) {
+    private Predicate generatePredicate(Expression path, Comparable arg, CriteriaBuilder cb) {
 
         switch (specificationCriteria.getOperation()) {
             case EQUALLY -> {
-                return criteriaBuilder.equal(root.get(key), arg);
+                return cb.equal(path, arg);
             }
             case GREATER_THAN_OR_EQUALLY -> {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get(key), (Comparable) arg);
+                return cb.greaterThanOrEqualTo(path, arg);
             }
             case LESS_THAN_OR_EQUALLY -> {
-                return criteriaBuilder.lessThanOrEqualTo(root.get(key), (Comparable) arg);
+                return cb.lessThanOrEqualTo(path, arg);
             }
         }
 

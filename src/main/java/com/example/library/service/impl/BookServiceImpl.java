@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> findAll(int page, int size, String sort, GenericFilterParameters filterParameters) {
+    public Page<Book> findAll(int page, int count, String sort, GenericFilterParameters filterParameters) {
         GenericSpecificationsBuilder<Book> builder = genericFilter.filterBy(filterParameters);
 
         if (!Strings.isNullOrEmpty(sort)) {
@@ -50,14 +50,14 @@ public class BookServiceImpl implements BookService {
             Sort.Direction direction = Sort.Direction.fromString(parameters[1]);
 
             if (parameters[0].equalsIgnoreCase("authors")) {
-                Page<Book> books = bookRepository.findAll(builder.build(), PageRequest.of(page, size));
+                Page<Book> books = bookRepository.findAll(builder.build(), PageRequest.of(page, count));
                 return customSort.sort(books, direction, "authors", "firstName");
             }
 
-            return bookRepository.findAll(builder.build(), PageRequest.of(page, size, Sort.by(direction, parameters[0])));
+            return bookRepository.findAll(builder.build(), PageRequest.of(page, count, Sort.by(direction, parameters[0])));
         }
 
-        return bookRepository.findAll(builder.build(), PageRequest.of(page, size));
+        return bookRepository.findAll(builder.build(), PageRequest.of(page, count));
     }
 
     @Override

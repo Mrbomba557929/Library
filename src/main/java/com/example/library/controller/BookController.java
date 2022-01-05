@@ -51,9 +51,9 @@ public class BookController {
                                      @RequestParam(name = "to", required = false) LocalDate to,
                                      @RequestParam(name = "sort", required = false) String sort,
                                      @RequestParam("page") int page,
-                                     @RequestParam("size") int size) {
+                                     @RequestParam("count") int count) {
         GenericFilterParameters genericFilterParameters = specificationParameterFactory.toFilterParameters(authors, genres, from, to);
-        Page<BookDto> books = bookService.findAll(page, size, sort, genericFilterParameters).map(bookFactory::toDto);
+        Page<BookDto> books = bookService.findAll(page, count, sort, genericFilterParameters).map(bookFactory::toDto);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
