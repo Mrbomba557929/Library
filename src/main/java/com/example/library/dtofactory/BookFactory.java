@@ -28,6 +28,7 @@ public class BookFactory {
 
     public Book toEntity(BookDto bookDto) {
         return Book.builder()
+                .id(bookDto.getId())
                 .name(bookDto.getName())
                 .createdAt(bookDto.getCreatedAt())
                 .authors(bookDto.getAuthors().stream().map(authorFactory::toEntity).collect(Collectors.toList()))

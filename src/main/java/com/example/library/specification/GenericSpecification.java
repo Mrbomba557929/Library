@@ -36,14 +36,13 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
         }
 
         for (Object arg : specificationCriteria.getArguments()) {
-            predicates.add(generatePredicate(expression, (Comparable<?>) arg, cb));
+            predicates.add(getPredicate(expression, (Comparable<?>) arg, cb));
         }
 
         return cb.or(predicates.toArray(Predicate[]::new));
     }
 
-    private Predicate generatePredicate(Expression path, Comparable arg, CriteriaBuilder cb) {
-
+    private Predicate getPredicate(Expression path, Comparable arg, CriteriaBuilder cb) {
         switch (specificationCriteria.getOperation()) {
             case EQUALLY -> {
                 return cb.equal(path, arg);
@@ -57,10 +56,9 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
             case LIKE -> {
                 return cb.like(path, (String) arg);
             }
+            default -> throw ErrorFactory.exceptionBuilder(ErrorMessage.SEARCH_OPERATION_NOT_SUPPORTED)
+                        .status(HttpStatus.EXPECTATION_FAILED)
+                        .build(SearchOperationNotSupportedException.class);
         }
-
-        throw ErrorFactory.exceptionBuilder(ErrorMessage.SEARCH_OPERATION_NOT_SUPPORTED)
-                .status(HttpStatus.EXPECTATION_FAILED)
-                .build(SearchOperationNotSupportedException.class);
     }
 }

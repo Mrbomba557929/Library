@@ -3,7 +3,6 @@ package com.example.library.specification;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,20 +16,15 @@ public class GenericSpecificationsBuilder<T> {
         specifications = new ArrayList<>();
     }
 
-    public final GenericSpecificationsBuilder<T> with(String key, SpecificationOperation specificationOperation, List<?> arguments) {
-        SpecificationCriteria specificationCriteria = SpecificationCriteria.builder()
-                        .key(key)
-                        .operation(specificationOperation)
-                        .arguments(arguments)
-                        .build();
-        params.add(specificationCriteria);
-        return this;
+    public final GenericSpecificationsBuilder<T> with(String key, boolean isOrOperation, SpecificationOperation specificationOperation, List<?> arguments) {
+        return with(key, null, isOrOperation, specificationOperation, arguments);
     }
 
-    public final GenericSpecificationsBuilder<T> with(String key, String keyInnerEntity, SpecificationOperation specificationOperation, List<?> arguments) {
+    public final GenericSpecificationsBuilder<T> with(String key, String keyInnerEntity, boolean isOrOperation, SpecificationOperation specificationOperation, List<?> arguments) {
         SpecificationCriteria specificationCriteria = SpecificationCriteria.builder()
                 .key(key)
                 .keyInnerEntity(keyInnerEntity)
+                .isOrOperation(isOrOperation)
                 .operation(specificationOperation)
                 .arguments(arguments)
                 .build();
@@ -51,7 +45,10 @@ public class GenericSpecificationsBuilder<T> {
             result = new GenericSpecification<>(params.get(0));
 
             for (int i = 1; i < params.size(); i++) {
-                result = Specification.where(result).or(new GenericSpecification<>(params.get(i)));
+                SpecificationCriteria criteria = params.get(i);
+                result = criteria.isOrOperation() ?
+                        Specification.where(result).or(new GenericSpecification<>(criteria)) :
+                        Specification.where(result).and(new GenericSpecification<>(criteria));
             }
         }
 
@@ -63,7 +60,7 @@ public class GenericSpecificationsBuilder<T> {
             }
 
             for (; index < specifications.size(); ++index) {
-                result = Specification.where(result).or(specifications.get(index));
+                result = Specification.where(result).and(specifications.get(index));
             }
         }
 

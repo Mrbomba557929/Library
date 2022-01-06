@@ -43,6 +43,14 @@ public interface BookService {
     Book save(Book book);
 
     /**
+     * Method to edit the {@link Book} entity.
+     *
+     * @param source - source the {@link Book} entity.
+     * @return edited the {@link Book} entity.
+     */
+    Book edit(Book source);
+
+    /**
      * Method to delete the {@link Book} by id.
      *
      * @param id - the id of the {@link Book} entity.

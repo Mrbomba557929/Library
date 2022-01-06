@@ -25,16 +25,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1")
 public class BookController {
 
-    private static final String FIND_ALL = "/books";
+    private static final String DEFAULT_URL = "/books";
     private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
-    private static final String ADD_BOOK = "/books/add";
-    private static final String DELETE_BY_ID = "/books";
 
     private final BookService bookService;
     private final BookFactory bookFactory;
     private final SpecificationParameterFactory specificationParameterFactory;
 
-    @GetMapping(FIND_ALL)
+    @GetMapping(DEFAULT_URL)
     public ResponseEntity<?> findAll() {
         List<BookDto> books = bookService.findAll()
                 .stream()
@@ -42,6 +40,24 @@ public class BookController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @PostMapping(DEFAULT_URL)
+    public ResponseEntity<?> save(@Validated @RequestBody BookDto bookDto) {
+        Book book = bookFactory.toEntity(bookDto);
+        return new ResponseEntity<>(bookFactory.toDto(bookService.save(book)), HttpStatus.OK);
+    }
+
+    @PutMapping(DEFAULT_URL)
+    public ResponseEntity<?> edit(@Validated @RequestBody BookDto bookDto) {
+        Book book = bookFactory.toEntity(bookDto);
+        return new ResponseEntity<>(bookFactory.toDto(bookService.edit(book)), HttpStatus.OK);
+    }
+
+    @DeleteMapping(DEFAULT_URL)
+    public ResponseEntity<?> deleteById(@RequestParam("id") Long id) {
+        bookService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(PAGINATE_ALL_BOOKS)
@@ -56,17 +72,5 @@ public class BookController {
         GenericFilterParameters genericFilterParameters = specificationParameterFactory.toFilterParameters(authors, genres, from, to, search);
         Page<BookDto> books = bookService.findAll(page, count, sort, genericFilterParameters).map(bookFactory::toDto);
         return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
-    @PostMapping(ADD_BOOK)
-    public ResponseEntity<?> addBook(@Validated @RequestBody BookDto bookDto) {
-        Book book = bookFactory.toEntity(bookDto);
-        return new ResponseEntity<>(bookFactory.toDto(bookService.save(book)), HttpStatus.OK);
-    }
-
-    @DeleteMapping(DELETE_BY_ID)
-    public ResponseEntity<?> deleteById(@RequestParam("id") Long id) {
-        bookService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
