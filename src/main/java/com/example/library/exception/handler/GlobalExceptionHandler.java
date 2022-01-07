@@ -1,8 +1,6 @@
 package com.example.library.exception.handler;
 
 import com.example.library.exception.ApplicationException;
-import com.example.library.exception.IllegalStateFilterException;
-import com.example.library.exception.NotSupportedTypeException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

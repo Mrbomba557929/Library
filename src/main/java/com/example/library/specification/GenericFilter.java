@@ -7,37 +7,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Objects;
 
 import static com.example.library.specification.SpecificationOperation.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 @Component
 public class GenericFilter<T> {
 
     public <U extends GenericFilterParameters> GenericSpecificationsBuilder<T> filterBy(U filterParameters) {
         GenericSpecificationsBuilder<T> builder = new GenericSpecificationsBuilder<>();
-        Field[] fields = filterParameters.getClass().getDeclaredFields();
-
         try {
 
-            for (Field field : fields) {
+            for (Field field : filterParameters.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 Object valueField = field.get(filterParameters);
 
                 if (Objects.nonNull(valueField)) {
                     switch (field.getName()) {
                         case "authors" ->
-                                builder.with("authors", "fio", true, EQUALLY, Arrays.asList((String[]) valueField));
+                                builder.with("authors", "fio", true, EQUALLY, asList((String[]) valueField));
                         case "genres" ->
-                                builder.with("genre", "genre", true, EQUALLY, Arrays.asList((String[]) valueField));
+                                builder.with("genre", "genre", true, EQUALLY, asList((String[]) valueField));
                         case "from" ->
-                                builder.with("createdAt", true, GREATER_THAN_OR_EQUALLY, Collections.singletonList(valueField));
+                                builder.with("createdAt", true, GREATER_THAN_OR_EQUALLY, singletonList(valueField));
                         case "to" ->
-                                builder.with("createdAt", true, LESS_THAN_OR_EQUALLY, Collections.singletonList(valueField));
+                                builder.with("createdAt", true, LESS_THAN_OR_EQUALLY, singletonList(valueField));
                         case "search" ->
-                                builder.with("name", false, LIKE, Collections.singletonList("%" + valueField + "%"));
+                                builder.with("name", false, LIKE, singletonList("%" + valueField + "%"));
                     }
                 }
             }

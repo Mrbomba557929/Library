@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +28,7 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> saveAll(List<Author> authors) {
         return authors.stream()
                 .map(author -> authorRepository.findByFirstNameAndLastName(author.getFirstName(), author.getLastName())
-                        .orElse(authorRepository.save(author)))
+                        .orElseGet(() -> authorRepository.save(author)))
                 .collect(Collectors.toList());
     }
 

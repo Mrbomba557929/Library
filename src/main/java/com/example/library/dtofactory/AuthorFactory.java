@@ -16,8 +16,8 @@ public class AuthorFactory {
 
     public Author toEntity(AuthorDto authorDto) {
         return Author.builder()
-                .firstName(authorDto.getFirstName())
-                .lastName(authorDto.getLastName())
+                .firstName(authorDto.firstName())
+                .lastName(authorDto.lastName())
                 .build();
     }
 }

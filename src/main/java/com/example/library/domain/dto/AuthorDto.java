@@ -1,15 +1,15 @@
 package com.example.library.domain.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class AuthorDto {
-    private String firstName;
-    private String lastName;
+public record AuthorDto(String firstName, String lastName) {
+
+    @Builder
+    @JsonCreator
+    public AuthorDto(@JsonProperty("firstName") String firstName, @JsonProperty("lastName") String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

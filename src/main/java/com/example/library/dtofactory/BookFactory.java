@@ -28,12 +28,12 @@ public class BookFactory {
 
     public Book toEntity(BookDto bookDto) {
         return Book.builder()
-                .id(bookDto.getId())
-                .name(bookDto.getName())
-                .createdAt(bookDto.getCreatedAt())
-                .authors(bookDto.getAuthors().stream().map(authorFactory::toEntity).collect(Collectors.toList()))
-                .genre(genreFactory.toEntity(bookDto.getGenre()))
-                .url(bookDto.getUrl() == null ? null : urlFactory.toEntity(bookDto.getUrl()))
+                .id(bookDto.id())
+                .name(bookDto.name())
+                .createdAt(bookDto.createdAt())
+                .authors(bookDto.authors().stream().map(authorFactory::toEntity).collect(Collectors.toList()))
+                .genre(genreFactory.toEntity(bookDto.genre()))
+                .url(bookDto.url() == null ? null : urlFactory.toEntity(bookDto.url()))
                 .build();
     }
 }

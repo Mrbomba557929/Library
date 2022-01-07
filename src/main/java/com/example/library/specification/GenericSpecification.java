@@ -7,8 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public record GenericSpecification<T>(SpecificationCriteria specificationCriteria) implements Specification<T> {
@@ -16,45 +14,43 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-        List<Predicate> predicates = new ArrayList<>();
         query.distinct(true);
-
         Expression<?> expression;
 
-        if (Objects.nonNull(specificationCriteria.getKeyInnerEntity())) {
+        if (Objects.nonNull(specificationCriteria.keyInnerEntity())) {
 
-            Join<Object, Object> joinParent = root.join(specificationCriteria.getKey());
+            Join<Object, Object> joinParent = root.join(specificationCriteria.key());
 
-            if (specificationCriteria.getKeyInnerEntity().equalsIgnoreCase("fio")) {
+            if (specificationCriteria.keyInnerEntity().equalsIgnoreCase("fio")) {
                 expression = cb.concat(cb.concat(joinParent.get("firstName"), " "), joinParent.get("lastName"));
             } else {
-                expression = joinParent.get(specificationCriteria.getKeyInnerEntity());
+                expression = joinParent.get(specificationCriteria.keyInnerEntity());
             }
 
         } else {
-            expression = root.get(specificationCriteria.getKey());
+            expression = root.get(specificationCriteria.key());
         }
 
-        for (Object arg : specificationCriteria.getArguments()) {
-            predicates.add(getPredicate(expression, (Comparable<?>) arg, cb));
-        }
-
-        return cb.or(predicates.toArray(Predicate[]::new));
+        return cb.or(specificationCriteria.arguments()
+                .stream()
+                .map(arg -> getPredicate(expression, (Comparable<?>) arg, cb))
+                .toArray(Predicate[]::new));
     }
 
-    private Predicate getPredicate(Expression path, Comparable arg, CriteriaBuilder cb) {
-        switch (specificationCriteria.getOperation()) {
+    @SuppressWarnings("unchecked")
+    private Predicate getPredicate(Expression expression, Comparable arg, CriteriaBuilder cb) {
+        switch (specificationCriteria.operation()) {
             case EQUALLY -> {
-                return cb.equal(path, arg);
+                return cb.equal(expression, arg);
             }
             case GREATER_THAN_OR_EQUALLY -> {
-                return cb.greaterThanOrEqualTo(path, arg);
+                return cb.greaterThanOrEqualTo(expression, arg);
             }
             case LESS_THAN_OR_EQUALLY -> {
-                return cb.lessThanOrEqualTo(path, arg);
+                return cb.lessThanOrEqualTo(expression, arg);
             }
             case LIKE -> {
-                return cb.like(path, (String) arg);
+                return cb.like(expression, (String) arg);
             }
             default -> throw ErrorFactory.exceptionBuilder(ErrorMessage.SEARCH_OPERATION_NOT_SUPPORTED)
                         .status(HttpStatus.EXPECTATION_FAILED)

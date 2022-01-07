@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -73,9 +74,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book edit(Book source) {
-        // TODO: здесь ошибка!
         Book book = findById(source.getId());
-        book.setUrl(urlService.save(source.getUrl()));
+        book.setUrl(Objects.isNull(source.getUrl()) ? book.getUrl() : urlService.save(source.getUrl()));
         book.setGenre(genreService.save(source.getGenre()));
         book.setAuthors(authorService.saveAll(source.getAuthors()));
         book.setName(source.getName());

@@ -15,7 +15,7 @@ public class GenreFactory {
 
     public Genre toEntity(GenreDto genreDto) {
         return Genre.builder()
-                .genre(genreDto.getGenre())
+                .genre(genreDto.genre())
                 .build();
     }
 }

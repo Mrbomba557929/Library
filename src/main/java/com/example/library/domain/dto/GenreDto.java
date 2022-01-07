@@ -1,14 +1,13 @@
 package com.example.library.domain.dto;
-
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class GenreDto {
-    private String genre;
+public record GenreDto(String genre) {
+
+    @Builder
+    @JsonCreator
+    public GenreDto(@JsonProperty("genre") String genre) {
+        this.genre = genre;
+    }
 }

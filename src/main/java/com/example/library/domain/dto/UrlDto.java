@@ -1,14 +1,14 @@
 package com.example.library.domain.dto;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class UrlDto {
-    private String url;
+public record UrlDto(String url) {
+
+    @Builder
+    @JsonCreator
+    public UrlDto(@JsonProperty("url") String url) {
+        this.url = url;
+    }
 }
