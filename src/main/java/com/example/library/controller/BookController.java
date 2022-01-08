@@ -27,7 +27,7 @@ public class BookController {
 
     private static final String DEFAULT_URL = "/books";
     private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
-    private static final String GET_ALL_CREATED_DATES = "/books/createdDates";
+    private static final String GET_ALL_CREATION_DATES = "/books/creationDates";
 
     private final BookService bookService;
     private final BookFactory bookFactory;
@@ -75,8 +75,8 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping(GET_ALL_CREATED_DATES)
-    public ResponseEntity<?> getAllCreatedDates() {
+    @GetMapping(GET_ALL_CREATION_DATES)
+    public ResponseEntity<?> getCreationDates() {
         List<LocalDate> dates = bookService.findAll()
                 .stream()
                 .map(Book::getCreatedAt)
