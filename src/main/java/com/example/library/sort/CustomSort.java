@@ -5,7 +5,6 @@ import com.example.library.exception.еnum.ErrorMessage;
 import com.example.library.exception.SortingException;
 import com.google.common.base.Strings;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Component
@@ -59,7 +59,9 @@ public class CustomSort<T> implements Comparator<String> {
 
         }).collect(Collectors.toList());
 
-        return new PageImpl<>(sortedList);
+        AtomicInteger counter = new AtomicInteger();
+
+        return page.map(item -> sortedList.get(counter.getAndIncrement()));
     }
 
     private Object getValueField(Object object, String field) throws NoSuchFieldException, IllegalAccessException {
