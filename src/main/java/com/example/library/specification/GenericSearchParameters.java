@@ -6,12 +6,12 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 
-public record GenericSearchParameters(String[] authors, String[] genres, LocalDate from,
-                                      LocalDate to, String search, String sort) {
+public record GenericSearchParameters(String[] authors, String[] genres, Integer from,
+                                      Integer to, String search, String sort) {
     @Builder
     @JsonCreator
     public GenericSearchParameters(@JsonProperty("authors") String[] authors, @JsonProperty("genres") String[] genres,
-                                   @JsonProperty("from") LocalDate from, @JsonProperty("to") LocalDate to,
+                                   @JsonProperty("from") Integer from, @JsonProperty("to") Integer to,
                                    @JsonProperty("search") String search, @JsonProperty("sort") String sort) {
         this.sort = sort;
         this.authors = authors;

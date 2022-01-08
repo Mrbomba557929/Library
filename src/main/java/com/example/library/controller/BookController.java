@@ -27,6 +27,7 @@ public class BookController {
 
     private static final String DEFAULT_URL = "/books";
     private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
+    private static final String GET_ALL_CREATED_DATES = "/books/createdDates";
 
     private final BookService bookService;
     private final BookFactory bookFactory;
@@ -64,13 +65,23 @@ public class BookController {
     public ResponseEntity<?> findAll(@RequestParam(name = "sort", required = false) String sort,
                                      @RequestParam(name = "authors", required = false) String authors,
                                      @RequestParam(name = "genres", required = false) String genres,
-                                     @RequestParam(name = "from", required = false) LocalDate from,
-                                     @RequestParam(name = "to", required = false) LocalDate to,
+                                     @RequestParam(name = "from", required = false) Integer from,
+                                     @RequestParam(name = "to", required = false) Integer to,
                                      @RequestParam(name = "search", required = false, defaultValue = "") String search,
                                      @RequestParam("page") int page,
                                      @RequestParam("count") int count) {
         GenericSearchParameters parameters = specificationFactory.toSearchParameters(authors, genres, from, to, search, sort);
         Page<BookDto> books = bookService.findAll(page, count, parameters).map(bookFactory::toDto);
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @GetMapping(GET_ALL_CREATED_DATES)
+    public ResponseEntity<?> getAllCreatedDates() {
+        List<LocalDate> dates = bookService.findAll()
+                .stream()
+                .map(Book::getCreatedAt)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(dates, HttpStatus.OK);
     }
 }

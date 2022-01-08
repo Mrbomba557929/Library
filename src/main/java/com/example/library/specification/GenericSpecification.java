@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 
 import javax.persistence.criteria.*;
-import java.util.Objects;
 
 public record GenericSpecification<T>(SpecificationCriteria specificationCriteria) implements Specification<T> {
 
@@ -17,13 +16,21 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
         query.distinct(true);
         Expression<?> expression;
 
-        if (Objects.nonNull(specificationCriteria.keyInnerEntity())) {
-            Join<Object, Object> joinParent = root.join(specificationCriteria.key());
-            expression = specificationCriteria.keyInnerEntity().equalsIgnoreCase("fio") ?
-                    cb.concat(cb.concat(joinParent.get("firstName"), " "), joinParent.get("lastName")) :
-                    joinParent.get(specificationCriteria.keyInnerEntity());
-        } else {
-            expression = root.get(specificationCriteria.key());
+        switch (specificationCriteria.key()) {
+            case "authors" -> {
+                Join<Object, Object> joinParent = root.join(specificationCriteria.key());
+                expression = cb.concat(cb.concat(joinParent.get("firstName"), " "), joinParent.get("lastName"));
+            }
+            case "genre" -> {
+                Join<Object, Object> joinParent = root.join(specificationCriteria.key());
+                expression = joinParent.get(specificationCriteria.keyInnerEntity());
+            }
+            case "createdAt" -> {
+                expression = cb.function("YEAR", Integer.class, root.get(specificationCriteria.key()));
+            }
+            default -> {
+                expression = root.get(specificationCriteria.key());
+            }
         }
 
         return cb.or(specificationCriteria.arguments()
