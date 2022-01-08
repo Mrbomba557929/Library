@@ -1,11 +1,11 @@
 package com.example.library.controller;
 
-import com.example.library.specification.GenericFilterParameters;
 import com.example.library.domain.model.Book;
 import com.example.library.domain.dto.BookDto;
 import com.example.library.dtofactory.BookFactory;
-import com.example.library.dtofactory.SpecificationParameterFactory;
+import com.example.library.dtofactory.SpecificationFactory;
 import com.example.library.service.BookService;
+import com.example.library.specification.GenericSearchParameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -30,7 +30,7 @@ public class BookController {
 
     private final BookService bookService;
     private final BookFactory bookFactory;
-    private final SpecificationParameterFactory specificationParameterFactory;
+    private final SpecificationFactory specificationFactory;
 
     @GetMapping(DEFAULT_URL)
     public ResponseEntity<?> findAll() {
@@ -69,8 +69,8 @@ public class BookController {
                                      @RequestParam(name = "search", required = false, defaultValue = "") String search,
                                      @RequestParam("page") int page,
                                      @RequestParam("count") int count) {
-        GenericFilterParameters genericFilterParameters = specificationParameterFactory.toFilterParameters(authors, genres, from, to, search);
-        Page<BookDto> books = bookService.findAll(page, count, sort, genericFilterParameters).map(bookFactory::toDto);
+        GenericSearchParameters parameters = specificationFactory.toSearchParameters(authors, genres, from, to, search, sort);
+        Page<BookDto> books = bookService.findAll(page, count, parameters).map(bookFactory::toDto);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 }

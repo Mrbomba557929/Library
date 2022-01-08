@@ -18,15 +18,10 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
         Expression<?> expression;
 
         if (Objects.nonNull(specificationCriteria.keyInnerEntity())) {
-
             Join<Object, Object> joinParent = root.join(specificationCriteria.key());
-
-            if (specificationCriteria.keyInnerEntity().equalsIgnoreCase("fio")) {
-                expression = cb.concat(cb.concat(joinParent.get("firstName"), " "), joinParent.get("lastName"));
-            } else {
-                expression = joinParent.get(specificationCriteria.keyInnerEntity());
-            }
-
+            expression = specificationCriteria.keyInnerEntity().equalsIgnoreCase("fio") ?
+                    cb.concat(cb.concat(joinParent.get("firstName"), " "), joinParent.get("lastName")) :
+                    joinParent.get(specificationCriteria.keyInnerEntity());
         } else {
             expression = root.get(specificationCriteria.key());
         }

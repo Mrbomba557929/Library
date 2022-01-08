@@ -6,12 +6,12 @@ import com.example.library.service.AuthorService;
 import com.example.library.service.GenreService;
 import com.example.library.service.UrlService;
 import com.example.library.sort.CustomSort;
-import com.example.library.specification.GenericFilterParameters;
 import com.example.library.domain.model.Book;
 import com.example.library.exception.NotFoundBookException;
 import com.example.library.repository.BookRepository;
 import com.example.library.service.BookService;
 import com.example.library.specification.GenericFilter;
+import com.example.library.specification.GenericSearchParameters;
 import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
     private final GenreService genreService;
     private final UrlService urlService;
     private final AuthorService authorService;
-    private final GenericFilter<Book> genericFilter;
+    private final GenericFilter<Book> filter;
     private final CustomSort<Book> customSort;
 
     @Override
@@ -49,19 +49,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> findAll(int page, int count, String sort, GenericFilterParameters filterParameters) {
-        Specification<Book> specification = genericFilter.filterBy(filterParameters).build();
+    public Page<Book> findAll(int page, int count, GenericSearchParameters parameters) {
+        Specification<Book> specification = filter.filterBy(parameters).build();
 
-        if (!Strings.isNullOrEmpty(sort)) {
-            String[] parameters = sort.split("\\s*,\\s*");
-            Sort.Direction direction = Sort.Direction.fromString(parameters[1]);
+        if (!Strings.isNullOrEmpty(parameters.sort())) {
+            String[] sortParameters = parameters.sort().split("\\s*,\\s*");
+            Sort.Direction direction = Sort.Direction.fromString(sortParameters[1]);
 
-            if (parameters[0].equalsIgnoreCase("authors")) {
+            if (sortParameters[0].equalsIgnoreCase("authors")) {
                 Page<Book> books = bookRepository.findAll(specification, PageRequest.of(page, count));
                 return customSort.sort(books, direction, "authors", "firstName");
             }
 
-            return bookRepository.findAll(specification, PageRequest.of(page, count, Sort.by(direction, parameters[0])));
+            return bookRepository.findAll(specification, PageRequest.of(page, count, Sort.by(direction, sortParameters[0])));
         }
 
         return bookRepository.findAll(specification, PageRequest.of(page, count));

@@ -16,13 +16,13 @@ import static java.util.Collections.singletonList;
 @Component
 public class GenericFilter<T> {
 
-    public <U extends GenericFilterParameters> GenericSpecificationsBuilder<T> filterBy(U filterParameters) {
+    public GenericSpecificationsBuilder<T> filterBy(GenericSearchParameters parameters) {
         GenericSpecificationsBuilder<T> builder = new GenericSpecificationsBuilder<>();
         try {
 
-            for (Field field : filterParameters.getClass().getDeclaredFields()) {
+            for (Field field : parameters.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                Object valueField = field.get(filterParameters);
+                Object valueField = field.get(parameters);
 
                 if (Objects.nonNull(valueField)) {
                     switch (field.getName()) {
