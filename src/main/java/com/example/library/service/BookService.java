@@ -1,5 +1,6 @@
 package com.example.library.service;
 
+import com.example.library.domain.dto.BookCreationDate;
 import com.example.library.domain.model.Book;
 import com.example.library.specification.GenericSearchParameters;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,13 @@ public interface BookService {
      * @return list of a {@link Book} entities on page.
      */
     Page<Book> findAll(int page, int count, GenericSearchParameters parameters);
+
+    /**
+     * Method to get creation dates of the books.
+     *
+     * @return list of creation dates of the books.
+     */
+    List<BookCreationDate> getCreationDates();
 
     /**
      * Method to save the {@link Book} entity.

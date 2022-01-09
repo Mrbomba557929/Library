@@ -1,13 +1,13 @@
 package com.example.library.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -26,8 +26,8 @@ public class Book {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "created_at")
-    private LocalDate createdAt;
+    @Column(name = "creation_at")
+    private LocalDate creationAt;
 
     @Column(name = "added_at")
     private LocalDate addedAt;

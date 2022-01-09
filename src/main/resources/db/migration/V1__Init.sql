@@ -17,7 +17,7 @@ CREATE TABLE `authors_books` (
 CREATE TABLE `books` (
     `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
     `name` TEXT,
-    `created_at` TIMESTAMP,
+    `creation_at` TIMESTAMP,
     `added_at` TIMESTAMP,
     `genre_id` INTEGER,
     `url_id` INTEGER
@@ -50,7 +50,7 @@ VALUES
     ('Антон', 'Баракутин'),
     ('Витя', 'Мавроди');
 
-INSERT INTO books (name, created_at, added_at, genre_id)
+INSERT INTO books (name, creation_at, added_at, genre_id)
 VALUES
     ('Путь к горе', '2020-02-02', '2020-02-02', 1),
     ('Путь к стулу', '2020-02-02', '2020-02-02', 2),

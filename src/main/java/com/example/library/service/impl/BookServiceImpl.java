@@ -1,5 +1,6 @@
 package com.example.library.service.impl;
 
+import com.example.library.domain.dto.BookCreationDate;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.exception.еnum.ErrorMessage;
 import com.example.library.service.AuthorService;
@@ -68,6 +69,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookCreationDate> getCreationDates() {
+        return bookRepository.getCreationDates();
+    }
+
+    @Override
     public Book save(Book book) {
         return bookRepository.save(book);
     }
@@ -79,7 +85,7 @@ public class BookServiceImpl implements BookService {
         book.setGenre(genreService.save(source.getGenre()));
         book.setAuthors(authorService.saveAll(source.getAuthors()));
         book.setName(source.getName());
-        book.setCreatedAt(source.getCreatedAt());
+        book.setCreationAt(source.getCreationAt());
         return save(book);
     }
 

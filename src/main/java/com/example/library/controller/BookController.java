@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,11 +76,6 @@ public class BookController {
 
     @GetMapping(GET_ALL_CREATION_DATES)
     public ResponseEntity<?> getCreationDates() {
-        List<LocalDate> dates = bookService.findAll()
-                .stream()
-                .map(Book::getCreatedAt)
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(dates, HttpStatus.OK);
+        return new ResponseEntity<>(bookService.getCreationDates(), HttpStatus.OK);
     }
 }

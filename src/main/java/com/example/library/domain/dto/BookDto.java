@@ -16,7 +16,7 @@ public record BookDto(Long id,
                       @Size(max = 255, message = "Error: Name can be maximum 255 characters!")
                       String name,
                       @NotNull(message = "Error: The date of writing the book must be indicated!")
-                      LocalDate createdAt,
+                      LocalDate creationAt,
                       @Size(min = 1, message = "Error: You must indicate at least one author of the book!")
                       List<AuthorDto> authors,
                       @NotNull(message = "Error: You must indicate the genre of the book!")
@@ -26,12 +26,12 @@ public record BookDto(Long id,
     @Builder
     @JsonCreator
     public BookDto(@JsonProperty("id") Long id, @JsonProperty("name") String name,
-                   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") @JsonProperty("createdAt") LocalDate createdAt,
+                   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") @JsonProperty("creationAt") LocalDate creationAt,
                    @JsonProperty("authors") List<AuthorDto> authors, @JsonProperty("genre") GenreDto genre,
                    @JsonProperty("url") UrlDto url) {
         this.id = id;
         this.name = name;
-        this.createdAt = createdAt;
+        this.creationAt = creationAt;
         this.authors = authors;
         this.genre = genre;
         this.url = url;
