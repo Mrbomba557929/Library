@@ -1,40 +1,40 @@
-CREATE TABLE `genres` (
-    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-    `genre` TEXT
+CREATE TABLE genres (
+    id SERIAL PRIMARY KEY,
+    genre TEXT
 );
 
-CREATE TABLE `authors` (
-    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-    `first_name` TEXT,
-    `last_name` TEXT
+CREATE TABLE authors (
+    id SERIAL PRIMARY KEY,
+    first_name TEXT,
+    last_name TEXT
 );
 
-CREATE TABLE `authors_books` (
-    `author_id` INTEGER,
-    `book_id` INTEGER
+CREATE TABLE authors_books (
+    author_id INTEGER,
+    book_id INTEGER
 );
 
-CREATE TABLE `books` (
-    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-    `name` TEXT,
-    `creation_at` TIMESTAMP,
-    `added_at` TIMESTAMP,
-    `genre_id` INTEGER,
-    `url_id` INTEGER
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    creation_at TIMESTAMP,
+    added_at TIMESTAMP,
+    genre_id INTEGER,
+    url_id INTEGER
 );
 
-CREATE TABLE `urls` (
-    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-    `url` TEXT
+CREATE TABLE urls (
+    id SERIAL PRIMARY KEY,
+    url TEXT
 );
 
-ALTER TABLE `authors_books` ADD FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`);
+ALTER TABLE authors_books ADD FOREIGN KEY (author_id) REFERENCES authors (id);
 
-ALTER TABLE `authors_books` ADD FOREIGN KEY (`book_id`) REFERENCES `books` (`id`);
+ALTER TABLE authors_books ADD FOREIGN KEY (book_id) REFERENCES books (id);
 
-ALTER TABLE `books` ADD FOREIGN KEY (`genre_id`) REFERENCES `genres` (`id`);
+ALTER TABLE books ADD FOREIGN KEY (genre_id) REFERENCES genres (id);
 
-ALTER TABLE `books` ADD FOREIGN KEY (`url_id`) REFERENCES `urls` (`id`);
+ALTER TABLE books ADD FOREIGN KEY (url_id) REFERENCES urls (id);
 
 INSERT INTO genres (genre)
 VALUES
