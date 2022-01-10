@@ -25,7 +25,7 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
                 Join<Object, Object> joinParent = root.join(specificationCriteria.key());
                 expression = joinParent.get(specificationCriteria.keyInnerEntity());
             }
-            case "createdAt" -> {
+            case "creationAt" -> {
                 expression = cb.function("YEAR", Integer.class, root.get(specificationCriteria.key()));
             }
             default -> {
