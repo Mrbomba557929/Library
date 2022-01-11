@@ -17,6 +17,6 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public Url save(Url url) {
-        return urlRepository.save(url);
+        return urlRepository.save(url.getUrl());
     }
 }

@@ -2,14 +2,30 @@ package com.example.library.repository;
 
 import com.example.library.domain.model.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 
-    @Query(value = "SELECT * FROM genres WHERE genres.genre = ?1", nativeQuery = true)
-    Optional<Genre> findByGenre(String genre);
+    @Query(value = """
+            SELECT *
+            FROM genres
+            """, nativeQuery = true)
+    List<Genre> findALl();
+
+    @Modifying
+    @Query(value = """
+            WITH e AS (
+                INSERT INTO genres VALUES (?1)
+                ON CONFLICT("genre") DO NOTHING
+                RETURNING *
+            )
+                SELECT * FROM e
+            UNION
+                SELECT genre FROM genres WHERE genre=?1""", nativeQuery = true)
+    Genre save(String genre);
 }
