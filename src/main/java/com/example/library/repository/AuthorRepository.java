@@ -34,7 +34,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query(value = """
             WITH e AS (
                 INSERT INTO authors (first_name, last_name) VALUES (?1, ?2)
-                ON CONFLICT("first_name", "last_name") DO NOTHING
+                ON CONFLICT ON CONSTRAINT authors_first_name_last_name_key DO NOTHING
                 RETURNING id, first_name, last_name
             )
             SELECT id, first_name, last_name FROM e

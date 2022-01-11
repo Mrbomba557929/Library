@@ -22,7 +22,7 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
     @Query(value = """
             WITH e AS (
                 INSERT INTO genres (genre) VALUES (?1)
-                ON CONFLICT("genre") DO NOTHING
+                ON CONFLICT ON CONSTRAINT genres_pkey DO NOTHING
                 RETURNING genre
             )
             SELECT genre FROM e

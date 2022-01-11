@@ -72,18 +72,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book book) {
-        book.setGenre(genreService.save(book.getGenre()));
         book.setAuthors(authorService.saveAll(book.getAuthors()));
+        book.setGenre(genreService.save(book.getGenre()));
         return bookRepository.save(book);
     }
 
     @Override
     public Book edit(Book source) {
         Book book = findById(source.getId());
-        book.setGenre(source.getGenre());
-        book.setAuthors(source.getAuthors());
         book.setName(source.getName());
         book.setCreationAt(source.getCreationAt());
+        book.setGenre(source.getGenre());
+        book.setAuthors(source.getAuthors());
         return save(book);
     }
 
