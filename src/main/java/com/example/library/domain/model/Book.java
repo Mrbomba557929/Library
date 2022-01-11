@@ -1,8 +1,6 @@
 package com.example.library.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,7 +41,7 @@ public class Book {
 
     @JsonManagedReference
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "genre_id")
+    @JoinColumn(name = "genre")
     private Genre genre;
 
     @JsonManagedReference

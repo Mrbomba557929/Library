@@ -5,7 +5,6 @@ import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.exception.еnum.ErrorMessage;
 import com.example.library.service.AuthorService;
 import com.example.library.service.GenreService;
-import com.example.library.service.UrlService;
 import com.example.library.sort.CustomSort;
 import com.example.library.domain.model.Book;
 import com.example.library.exception.NotFoundBookException;
@@ -23,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +29,6 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final GenreService genreService;
-    private final UrlService urlService;
     private final AuthorService authorService;
     private final GenericFilter<Book> filter;
     private final CustomSort<Book> customSort;
@@ -75,15 +72,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book book) {
+        book.setGenre(genreService.save(book.getGenre()));
+        book.setAuthors(authorService.saveAll(book.getAuthors()));
         return bookRepository.save(book);
     }
 
     @Override
     public Book edit(Book source) {
         Book book = findById(source.getId());
-        book.setUrl(Objects.isNull(source.getUrl()) ? book.getUrl() : urlService.save(source.getUrl()));
-        book.setGenre(genreService.save(source.getGenre()));
-        book.setAuthors(authorService.saveAll(source.getAuthors()));
+        book.setGenre(source.getGenre());
+        book.setAuthors(source.getAuthors());
         book.setName(source.getName());
         book.setCreationAt(source.getCreationAt());
         return save(book);
