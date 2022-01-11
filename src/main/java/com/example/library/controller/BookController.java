@@ -51,6 +51,7 @@ public class BookController {
     @PutMapping(DEFAULT_URL)
     public ResponseEntity<?> edit(@Validated @RequestBody BookDto bookDto) {
         Book book = bookFactory.toEntity(bookDto);
+        log.info(book);
         return new ResponseEntity<>(bookFactory.toDto(bookService.edit(book)), HttpStatus.OK);
     }
 

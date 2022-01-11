@@ -14,6 +14,7 @@ import com.example.library.specification.GenericFilter;
 import com.example.library.specification.GenericSearchParameters;
 import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
