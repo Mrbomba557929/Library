@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -79,12 +80,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book edit(Book source) {
-        Book book = findById(source.getId());
-        book.setName(source.getName());
-        book.setCreationAt(source.getCreationAt());
-        book.setGenre(source.getGenre());
-        book.setAuthors(source.getAuthors());
-        return save(book);
+        Optional<Book> bookOptional = bookRepository.findById(source.getId());
+
+        if (bookOptional.isPresent()) {
+            return save(source);
+        }
+
+        throw ErrorFactory.exceptionBuilder(ErrorMessage.NOT_FOUND_BOOK)
+                .status(HttpStatus.NOT_FOUND)
+                .build(NotFoundBookException.class);
     }
 
     @Override
