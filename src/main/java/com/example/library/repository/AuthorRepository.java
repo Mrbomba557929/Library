@@ -4,7 +4,6 @@ import com.example.library.domain.model.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +13,9 @@ import java.util.List;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    @NonNull
     @Override
     @Query(value = """
-            SELECT a.id, a.first_name, a.last_name
+            SELECT a.id, a.fio
             FROM authors a
             INNER JOIN authors_books ab on a.id = ab.author_id
             INNER JOIN books b on ab.book_id = b.id
@@ -33,13 +31,13 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     @Query(value = """
             WITH e AS (
-                INSERT INTO authors (first_name, last_name) VALUES (?1, ?2)
-                ON CONFLICT ON CONSTRAINT authors_first_name_last_name_key DO NOTHING
-                RETURNING id, first_name, last_name
+                INSERT INTO authors (fio) VALUES (?1)
+                ON CONFLICT ON CONSTRAINT authors_fio_key DO NOTHING
+                RETURNING id, fio
             )
-            SELECT id, first_name, last_name FROM e
+            SELECT id, fio FROM e
             UNION
-            SELECT id, first_name, last_name FROM authors WHERE first_name=?1 AND last_name=?2
+            SELECT id, fio FROM authors WHERE fio=?1
             """, nativeQuery = true)
-    Author save(String firstName, String lastName);
+    Author save(String fio);
 }

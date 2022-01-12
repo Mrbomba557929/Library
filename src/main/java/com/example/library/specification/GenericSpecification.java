@@ -17,11 +17,7 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
         Expression<?> expression;
 
         switch (specificationCriteria.key()) {
-            case "authors" -> {
-                Join<Object, Object> joinParent = root.join(specificationCriteria.key());
-                expression = cb.concat(cb.concat(joinParent.get("firstName"), " "), joinParent.get("lastName"));
-            }
-            case "genre" -> {
+            case "authors", "genre" -> {
                 Join<Object, Object> joinParent = root.join(specificationCriteria.key());
                 expression = joinParent.get(specificationCriteria.keyInnerEntity());
             }
@@ -52,7 +48,7 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
                 return cb.lessThanOrEqualTo(expression, arg);
             }
             case LIKE -> {
-                return cb.like(expression, (String) arg);
+                return cb.like(cb.lower(expression), ((String) arg).toLowerCase());
             }
             default -> throw ErrorFactory.exceptionBuilder(ErrorMessage.SEARCH_OPERATION_NOT_SUPPORTED)
                         .status(HttpStatus.EXPECTATION_FAILED)

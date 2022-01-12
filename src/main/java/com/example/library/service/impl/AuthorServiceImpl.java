@@ -26,7 +26,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<Author> saveAll(List<Author> authors) {
         return authors.stream()
-                .map(author -> authorRepository.save(author.getFirstName(), author.getLastName()))
+                .map(author -> authorRepository.save(author.getFio()))
                 .collect(Collectors.toList());
     }
 

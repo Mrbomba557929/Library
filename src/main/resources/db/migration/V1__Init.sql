@@ -4,9 +4,7 @@ CREATE TABLE genres (
 
 CREATE TABLE authors (
     id SERIAL PRIMARY KEY,
-    first_name TEXT,
-    last_name TEXT,
-    UNIQUE (first_name, last_name)
+    fio TEXT UNIQUE
 );
 
 CREATE TABLE authors_books (

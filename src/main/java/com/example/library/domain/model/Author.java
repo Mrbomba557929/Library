@@ -21,11 +21,8 @@ public class Author {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "fio")
+    private String fio;
 
     @JsonBackReference
     @ManyToMany(fetch = FetchType.EAGER)

@@ -9,15 +9,13 @@ public class AuthorFactory {
 
     public AuthorDto toDto(Author author) {
         return AuthorDto.builder()
-                .firstName(author.getFirstName())
-                .lastName(author.getLastName())
+                .fio(author.getFio())
                 .build();
     }
 
     public Author toEntity(AuthorDto authorDto) {
         return Author.builder()
-                .firstName(authorDto.firstName())
-                .lastName(authorDto.lastName())
+                .fio(authorDto.fio())
                 .build();
     }
 }

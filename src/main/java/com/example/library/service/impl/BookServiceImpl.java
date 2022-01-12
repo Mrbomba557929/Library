@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Log4j2
 @RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
