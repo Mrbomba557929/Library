@@ -58,7 +58,7 @@ public class BookServiceImpl implements BookService {
 
             if (sortParameters[0].equalsIgnoreCase("authors")) {
                 Page<Book> books = bookRepository.findAll(specification, PageRequest.of(page, count));
-                return customSort.sort(books, direction, "authors", "firstName");
+                return customSort.sort(books, direction, "authors", "fio");
             }
 
             return bookRepository.findAll(specification, PageRequest.of(page, count, Sort.by(direction, sortParameters[0])));
