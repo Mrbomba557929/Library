@@ -24,6 +24,9 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             """, nativeQuery = true)
     Optional<Book> findById(Long id);
 
+    @Query(value = "SELECT COUNT(*) FROM books", nativeQuery = true)
+    long getCountAllBooks();
+
     @Override
     @Query(value = """
             SELECT bk.id, bk.name, bk.creation_at, bk.added_at, bk.genre, bk.url_id

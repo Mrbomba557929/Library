@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private static final String DEFAULT_URL = "/books";
+    private static final String GET_COUNT_ALL_BOOKS = "/books/count";
     private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
     private static final String GET_ALL_CREATION_DATES = "/books/creationDates";
 
@@ -40,6 +41,12 @@ public class BookController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @GetMapping(GET_COUNT_ALL_BOOKS)
+    public ResponseEntity<?> getCountAllBooks() {
+        BookDto.BookCountResponse response = bookFactory.toBookCountResponse(bookService.getCountAllBooks());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(DEFAULT_URL)

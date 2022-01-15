@@ -26,6 +26,13 @@ public class BookFactory {
                 .build();
     }
 
+    public BookDto.BookCountResponse toBookCountResponse(long count) {
+        return BookDto.BookCountResponse.builder()
+                .count(count)
+                .message("number of books")
+                .build();
+    }
+
     public Book toEntity(BookDto bookDto) {
         return Book.builder()
                 .id(bookDto.id())

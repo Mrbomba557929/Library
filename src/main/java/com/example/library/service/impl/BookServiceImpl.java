@@ -49,6 +49,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public long getCountAllBooks() {
+        return bookRepository.getCountAllBooks();
+    }
+
+    @Override
     public Page<Book> findAll(int page, int count, GenericSearchParameters parameters) {
         Specification<Book> specification = filter.filterBy(parameters).build();
 

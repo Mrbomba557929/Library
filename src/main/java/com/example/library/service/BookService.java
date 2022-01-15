@@ -25,6 +25,13 @@ public interface BookService {
     List<Book> findAll();
 
     /**
+     * Method to retrieve count all books.
+     *
+     * @return count all books.
+     */
+    long getCountAllBooks();
+
+    /**
      * Method to find all a {@link Book} entities.
      *
      * @param page - current number of page.
