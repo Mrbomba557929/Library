@@ -27,9 +27,9 @@ public class GenericFilter<T> {
                 if (Objects.nonNull(valueField)) {
                     switch (field.getName()) {
                         case "authors" ->
-                                builder.with("authors", "fio", true, EQUALLY, asList((String[]) valueField));
+                                builder.with("authors", "fio", false, EQUALLY, asList((String[]) valueField));
                         case "genres" ->
-                                builder.with("genre", "genre", true, EQUALLY, asList((String[]) valueField));
+                                builder.with("genre", "genre", false, EQUALLY, asList((String[]) valueField));
                         case "from" ->
                                 builder.with("creationAt", false, GREATER_THAN_OR_EQUALLY, singletonList(valueField));
                         case "to" ->
