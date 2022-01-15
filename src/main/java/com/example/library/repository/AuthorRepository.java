@@ -17,8 +17,6 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query(value = """
             SELECT a.id, a.fio
             FROM authors a
-            INNER JOIN authors_books ab on a.id = ab.author_id
-            INNER JOIN books b on ab.book_id = b.id
             """, nativeQuery = true)
     List<Author> findAll();
 
