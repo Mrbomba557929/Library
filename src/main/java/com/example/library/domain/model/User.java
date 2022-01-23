@@ -31,4 +31,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
     private Set<Authority> authorities;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private Set<Book> books;
 }

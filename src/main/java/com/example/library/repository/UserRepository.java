@@ -39,12 +39,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = """
             WITH e AS (
                 INSERT INTO users (email, password) VALUES (?1, ?2)
-                ON CONFLICT ON CONSTRAINT genres_pkey DO NOTHING
-                RETURNING *
+                ON CONFLICT ON CONSTRAINT users_email_key DO NOTHING
+                RETURNING id, email, password
             )
             SELECT * FROM e
             UNION
-            SELECT * FROM users WHERE users.email = ?1""", nativeQuery = true)
+            SELECT id, email, password FROM users WHERE users.email = ?1""", nativeQuery = true)
     User save(String email, String password);
 
     @Modifying

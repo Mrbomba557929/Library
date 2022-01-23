@@ -1,6 +1,7 @@
 package com.example.library.service.impl;
 
 import com.example.library.domain.dto.BookCreationDate;
+import com.example.library.exception.NotFound;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.exception.еnum.ErrorMessage;
 import com.example.library.service.AuthorService;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.library.exception.еnum.ErrorMessage.NOT_FOUND_BOOK;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
@@ -36,9 +40,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book findById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> ErrorFactory.exceptionBuilder(ErrorMessage.NOT_FOUND_BOOK)
-                        .status(HttpStatus.NOT_FOUND)
-                        .build(NotFoundBookException.class));
+                .orElseThrow(() ->
+                        ErrorFactory.exceptionBuilder(NOT_FOUND_BOOK)
+                                .status(NOT_FOUND)
+                                .build(NotFound.class)
+                );
     }
 
     @Override
@@ -90,9 +96,9 @@ public class BookServiceImpl implements BookService {
             return save(source);
         }
 
-        throw ErrorFactory.exceptionBuilder(ErrorMessage.NOT_FOUND_BOOK)
-                .status(HttpStatus.NOT_FOUND)
-                .build(NotFoundBookException.class);
+        throw ErrorFactory.exceptionBuilder(NOT_FOUND_BOOK)
+                .status(NOT_FOUND)
+                .build(NotFound.class);
     }
 
     @Override

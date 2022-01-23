@@ -1,6 +1,8 @@
 package com.example.library.controller;
 
+import com.example.library.domain.dto.RefreshTokenDto;
 import com.example.library.domain.dto.UserDto;
+import com.example.library.domain.model.RefreshToken;
 import com.example.library.domain.model.User;
 import com.example.library.dtofactory.UserFactory;
 import com.example.library.exception.AuthenticationException;
@@ -13,11 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class AuthController {
 
     private static final String REGISTRATION = "/registration";
     private static final String AUTHENTICATION = "/authentication";
+    private static final String UPDATE_ACCESS_TOKEN = "/auth/updateAccessToken";
 
     private final JwtUtils jwtUtils;
     private final UserFactory userFactory;
@@ -34,13 +38,13 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping(REGISTRATION)
-    public ResponseEntity<?> registration(@RequestBody @Validated UserDto.UserRegistrationRequestDto request) {
+    public ResponseEntity<?> registration(@RequestBody @Valid UserDto.UserRegistrationRequestDto request) {
         User savedUser = userService.registration(userFactory.toEntity(request), passwordEncoder);
         return new ResponseEntity<>(userFactory.toDto(savedUser), HttpStatus.CREATED);
     }
 
     @PostMapping(AUTHENTICATION)
-    public ResponseEntity<?> authentication(@RequestBody @Validated UserDto.UserAuthenticationRequestDto request) {
+    public ResponseEntity<?> authentication(@RequestBody @Valid UserDto.UserAuthenticationRequestDto request) {
         User foundUser = userService.findByEmail(request.email());
 
         if (passwordEncoder.matches(request.password(), foundUser.getPassword())) {
@@ -50,6 +54,16 @@ public class AuthController {
         throw ErrorFactory.exceptionBuilder(ErrorMessage.AUTHENTICATION_EXCEPTION)
                 .status(HttpStatus.UNAUTHORIZED)
                 .build(AuthenticationException.class);
+    }
+
+    @PostMapping(UPDATE_ACCESS_TOKEN)
+    public ResponseEntity<?> updateAccessToken(@RequestBody @Valid RefreshTokenDto.TokenRefreshRequestDto refreshTokenRequest) {
+
+        RefreshToken refreshToken = refreshTokenService.verifyExpiration(refreshTokenRequest.refreshToken());
+        UserDto userDto = userFactory.toDto(refreshToken.getUser());
+        String token = jwtUtils.generateJwtToken(userDto.email());
+
+        return new ResponseEntity<>(userFactory.toResponseDto(userDto, refreshToken.getToken(), token), HttpStatus.OK);
     }
 
     private UserDto.UserResponseDto generateAccessResponse(User user) {

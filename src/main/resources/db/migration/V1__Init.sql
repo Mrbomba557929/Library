@@ -23,6 +23,7 @@ CREATE TABLE books
     creation_at TIMESTAMP,
     genre       TEXT,
     added_at    TIMESTAMP,
+    user_id     INTEGER,
     url_id      INTEGER
 );
 
@@ -42,13 +43,13 @@ CREATE TABLE users_authorities
 CREATE TABLE authorities
 (
     id   SERIAL PRIMARY KEY,
-    role TEXT CHECK (length(lower(20)))
+    role VARCHAR(20)
 );
 
 CREATE TABLE users
 (
     id       SERIAL PRIMARY KEY,
-    email    TEXT,
+    email    TEXT UNIQUE,
     password TEXT
 );
 
@@ -59,6 +60,9 @@ CREATE TABLE refresh_tokens
     expiry_date TIMESTAMP,
     user_id     INTEGER
 );
+
+ALTER TABLE books
+    ADD FOREIGN KEY (user_id) REFERENCES users (id);
 
 ALTER TABLE refresh_tokens
     ADD FOREIGN KEY (user_id) REFERENCES users (id);

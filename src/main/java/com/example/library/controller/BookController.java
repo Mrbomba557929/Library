@@ -11,9 +11,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,13 +50,13 @@ public class BookController {
     }
 
     @PostMapping(DEFAULT_URL)
-    public ResponseEntity<?> save(@Validated @RequestBody BookDto bookDto) {
+    public ResponseEntity<?> save(@Valid @RequestBody BookDto bookDto) {
         Book book = bookFactory.toEntity(bookDto);
         return new ResponseEntity<>(bookFactory.toDto(bookService.save(book)), HttpStatus.OK);
     }
 
     @PutMapping(DEFAULT_URL)
-    public ResponseEntity<?> edit(@Validated @RequestBody BookDto bookDto) {
+    public ResponseEntity<?> edit(@Valid @RequestBody BookDto bookDto) {
         Book book = bookFactory.toEntity(bookDto);
         log.info(book);
         return new ResponseEntity<>(bookFactory.toDto(bookService.edit(book)), HttpStatus.OK);
