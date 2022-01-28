@@ -9,7 +9,7 @@ import com.example.library.service.AuthorityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.example.library.exception.еnum.ErrorMessage.NOT_FOUND_AUTHORITY_EXCEPTION;
+import static com.example.library.exception.factory.ErrorMessage.NOT_FOUND_AUTHORITY_EXCEPTION;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor

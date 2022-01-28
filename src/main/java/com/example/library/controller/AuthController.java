@@ -7,7 +7,6 @@ import com.example.library.domain.model.User;
 import com.example.library.dtofactory.UserFactory;
 import com.example.library.exception.AuthenticationException;
 import com.example.library.exception.factory.ErrorFactory;
-import com.example.library.exception.еnum.ErrorMessage;
 import com.example.library.security.jwt.JwtUtils;
 import com.example.library.service.RefreshTokenService;
 import com.example.library.service.UserService;
@@ -22,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import static com.example.library.exception.factory.ErrorMessage.AUTHENTICATION_EXCEPTION;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
@@ -29,7 +31,7 @@ public class AuthController {
 
     private static final String REGISTRATION = "/registration";
     private static final String AUTHENTICATION = "/authentication";
-    private static final String UPDATE_ACCESS_TOKEN = "/auth/updateAccessToken";
+    private static final String UPDATE_ACCESS_TOKEN = "/updateAccessToken";
 
     private final JwtUtils jwtUtils;
     private final UserFactory userFactory;
@@ -51,8 +53,8 @@ public class AuthController {
             return new ResponseEntity<>(generateAccessResponse(foundUser), HttpStatus.OK);
         }
 
-        throw ErrorFactory.exceptionBuilder(ErrorMessage.AUTHENTICATION_EXCEPTION)
-                .status(HttpStatus.UNAUTHORIZED)
+        throw ErrorFactory.exceptionBuilder(AUTHENTICATION_EXCEPTION)
+                .status(UNAUTHORIZED)
                 .build(AuthenticationException.class);
     }
 

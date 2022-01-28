@@ -1,4 +1,4 @@
-package com.example.library.exception.еnum;
+package com.example.library.exception.factory;
 
 import lombok.Getter;
 
@@ -15,7 +15,8 @@ public enum ErrorMessage {
     SORTING_EXCEPTION("Error: there were some problems while sorting entities!"),
     AUTHENTICATION_EXCEPTION("Error: password is invalid!"),
     REFRESH_TOKEN_NOT_FOUND("Error: refresh token was not found!"),
-    TOKEN_EXPIRED("Error: token was expired!");
+    TOKEN_EXPIRED("Error: token was expired!"),
+    USER_WITH_SUCH_EMAIL_EXISTS("Error: user with such email already exists");
 
     private final String message;
 

@@ -1,5 +1,6 @@
 package com.example.library.service;
 
+import com.example.library.domain.model.Authority;
 import com.example.library.domain.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -37,4 +38,13 @@ public interface UserService {
      * @return found the {@link User} entity
      */
     User findById(Long id);
+
+    /**
+     * Method for adding the {@link Authority} entity to the {@link User} entity.
+     *
+     * @param userId - the id of the {@link User} entity.
+     * @param authorityId - the id of the {@link Authority} entity.
+     * @return the {@link User} entity with added the {@link Authority} entity.
+     */
+    User addAuthority(Long userId, Long authorityId);
 }

@@ -1,6 +1,5 @@
 package com.example.library.security.jwt;
 
-import com.example.library.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

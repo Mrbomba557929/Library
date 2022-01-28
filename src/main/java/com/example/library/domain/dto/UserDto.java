@@ -7,16 +7,27 @@ import lombok.Builder;
 
 import java.util.Set;
 
-public record UserDto(Long id, String email, String password, Set<Authority> authorities) {
+public record UserDto(Long id, String email, Set<Authority> authorities) {
 
     @Builder
     @JsonCreator
     public UserDto(@JsonProperty("id") Long id, @JsonProperty("email") String email,
-                   @JsonProperty("password") String password, @JsonProperty("authorities") Set<Authority> authorities) {
+                   @JsonProperty("authorities") Set<Authority> authorities) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.authorities = authorities;
+    }
+
+    public static record UserResponseDto(UserDto userDto, String accessToken, String refreshToken) {
+
+        @Builder
+        @JsonCreator
+        public UserResponseDto(@JsonProperty("userDto") UserDto userDto, @JsonProperty("accessToken") String accessToken,
+                               @JsonProperty("refreshToken") String refreshToken) {
+            this.userDto = userDto;
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
+        }
     }
 
     public static record UserRegistrationRequestDto(String email, String password, String confirmPassword) {
@@ -38,18 +49,6 @@ public record UserDto(Long id, String email, String password, Set<Authority> aut
         public UserAuthenticationRequestDto(@JsonProperty("email") String email, @JsonProperty("password") String password) {
             this.email = email;
             this.password = password;
-        }
-    }
-
-    public static record UserResponseDto(UserDto userDto, String accessToken, String refreshToken) {
-
-        @Builder
-        @JsonCreator
-        public UserResponseDto(@JsonProperty("userDto") UserDto userDto, @JsonProperty("accessToken") String accessToken,
-                               @JsonProperty("refreshToken") String refreshToken) {
-            this.userDto = userDto;
-            this.accessToken = accessToken;
-            this.refreshToken = refreshToken;
         }
     }
 }

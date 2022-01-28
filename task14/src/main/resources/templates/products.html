@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8"/>
+    <title>Каталог товаров</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div th:replace="~{navigation :: navi(Shop)}"/>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название товара</th>
+            <th>Цена</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"/>
+            <td th:text="${product.title}"/>
+            <td th:text="${product.price}"/>
+            <td>
+                <a th:href="@{'/products/show/' + ${product.id}}" th:text="Просмотреть"/>
+                <a th:href="@{'/products/delite/' + ${product.id}}" th:text="Удалить"/>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{'/products/edit/' + ${product.id}}"
+                   th:text="Редактировать"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <span th:text="${'Всего товаров ' + products.size()}"/>
+    <form th:action="@{/products/add}" class="form-horizontal">
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+
+<div class="container">
+    <br>
+
+    <h3>Фильтрация продуктов</h3>
+    <form th:action = "@{/products}"
+    method = "get" class ="form-horizontal">
+
+        <div style ="..." class="input-group">
+            <span class ="input-group-addon"><i class ="glyphicon-user"></i>></span>
+            <input th:value="${word != null} ? ${word}" th:name="word" type="text" placeholder="Название">
+        </div>
+        <div style ="..." class="input-group">
+            <span class ="input-group-addon"><i class ="glyphicon-user"></i>></span>
+            <input th:value="${min != null} ? ${min}" th:name="min" type="number" placeholder="Минимальная цена">
+        </div>
+        <div style ="..." class="input-group">
+            <span class ="input-group-addon"><i class ="glyphicon-user"></i>></span>
+            <input th:value="${max != null} ? ${max}" th:name="max" type="number" placeholder="Максимальная цена">
+        </div>
+
+        <div style ="..." class="form-group">
+            <div class ="col-sm-6 controls">
+                <button type="submit" class="btn btn-primary">Фильтровать</button>
+            </div>
+
+        </div>
+    </form>
+
+
+
+    <br>
+
+<!--    <h1 th:text="#{products}" />-->
+
+<!--    <table class="table table-hover">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>ID</th>-->
+<!--            <th>Картинка</th>-->
+<!--            <th>Название товара</th>-->
+<!--            <th>Цена</th>-->
+<!--            <th></th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="product : ${products}">-->
+<!--            <td th:text="${product.id}"/>-->
+<!--            <td>-->
+<!--                <img th:if="${product.images.size() > 0}" width="40" height="40" th:src="@{'/images/' + ${product.images[0].path}}" />-->
+<!--            </td>-->
+<!--            <td >-->
+<!--                <a th:text="${product.title}" th:href="@{'/shop/product_info/' + ${product.id}}" />-->
+<!--            </td>-->
+
+<!--            <td th:text="${product.price}"/>-->
+<!--            <td>-->
+<!--                <a th:href="@{'/shop/cart/add/' + ${product.id}}" class="btn btn-primary">Добавить в корзину</a>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+
+<!--    <nav aria-label="Page navigation example">-->
+<!--        <ul class="pagination">-->
+<!--            &lt;!&ndash;<li class="page-item"><a class="page-link" href="#">Previous</a></li>&ndash;&gt;-->
+<!--            <li th:each="i : ${#numbers.sequence(1, totalPage, 1)}">-->
+<!--                <a th:class="page-link" th:text="${i}" th:classappend="${page == i ? 'active' : ''}" th:href="@{'/shop/?page=' + ${i} + ${filters}}"></a>-->
+<!--            </li>-->
+<!--            &lt;!&ndash;<li class="page-item"><a class="page-link" href="#">Next</a></li>&ndash;&gt;-->
+<!--        </ul>-->
+<!--    </nav>-->
+</div>
+
+</body>
+</html>

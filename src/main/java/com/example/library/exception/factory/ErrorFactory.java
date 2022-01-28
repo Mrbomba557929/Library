@@ -2,7 +2,6 @@ package com.example.library.exception.factory;
 
 import com.example.library.exception.ApplicationException;
 import com.example.library.exception.UnknownExceptionClassException;
-import com.example.library.exception.еnum.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 

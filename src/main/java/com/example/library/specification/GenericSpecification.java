@@ -2,11 +2,12 @@ package com.example.library.specification;
 
 import com.example.library.exception.SearchOperationNotSupportedException;
 import com.example.library.exception.factory.ErrorFactory;
-import com.example.library.exception.еnum.ErrorMessage;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 
 import javax.persistence.criteria.*;
+
+import static com.example.library.exception.factory.ErrorMessage.SEARCH_OPERATION_NOT_SUPPORTED;
+import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 public record GenericSpecification<T>(SpecificationCriteria specificationCriteria) implements Specification<T> {
 
@@ -50,8 +51,8 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
             case LIKE -> {
                 return cb.like(cb.lower(expression), ((String) arg).toLowerCase());
             }
-            default -> throw ErrorFactory.exceptionBuilder(ErrorMessage.SEARCH_OPERATION_NOT_SUPPORTED)
-                        .status(HttpStatus.EXPECTATION_FAILED)
+            default -> throw ErrorFactory.exceptionBuilder(SEARCH_OPERATION_NOT_SUPPORTED)
+                        .status(EXPECTATION_FAILED)
                         .build(SearchOperationNotSupportedException.class);
         }
     }

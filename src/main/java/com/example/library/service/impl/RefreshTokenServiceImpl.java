@@ -9,14 +9,14 @@ import com.example.library.service.RefreshTokenService;
 import com.example.library.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.UUID;
 
-import static com.example.library.exception.еnum.ErrorMessage.REFRESH_TOKEN_NOT_FOUND;
-import static com.example.library.exception.еnum.ErrorMessage.TOKEN_EXPIRED;
+import static com.example.library.exception.factory.ErrorMessage.REFRESH_TOKEN_NOT_FOUND;
+import static com.example.library.exception.factory.ErrorMessage.TOKEN_EXPIRED;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
@@ -55,7 +55,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         if (refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(refreshToken);
             throw ErrorFactory.exceptionBuilder(TOKEN_EXPIRED)
-                    .status(HttpStatus.FORBIDDEN)
+                    .status(FORBIDDEN)
                     .build(TokenExpiredException.class);
         }
 

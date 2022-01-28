@@ -18,7 +18,7 @@ public class UserFactory {
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .password(user.getPassword())
+                .authorities(user.getAuthorities())
                 .build();
     }
 
