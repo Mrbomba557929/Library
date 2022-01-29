@@ -46,5 +46,5 @@ public interface UserService {
      * @param authorityId - the id of the {@link Authority} entity.
      * @return the {@link User} entity with added the {@link Authority} entity.
      */
-    User addAuthority(Long userId, Long authorityId);
+    User addAuthorityAndReturnUser(Long userId, Long authorityId);
 }

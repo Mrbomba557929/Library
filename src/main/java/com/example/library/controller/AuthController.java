@@ -4,8 +4,8 @@ import com.example.library.domain.dto.RefreshTokenDto;
 import com.example.library.domain.dto.UserDto;
 import com.example.library.domain.model.RefreshToken;
 import com.example.library.domain.model.User;
-import com.example.library.dtofactory.UserFactory;
-import com.example.library.exception.AuthenticationException;
+import com.example.library.mapper.UserMapper;
+import com.example.library.exception.business.AuthenticationException;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.security.jwt.JwtUtils;
 import com.example.library.service.RefreshTokenService;
@@ -34,15 +34,15 @@ public class AuthController {
     private static final String UPDATE_ACCESS_TOKEN = "/updateAccessToken";
 
     private final JwtUtils jwtUtils;
-    private final UserFactory userFactory;
+    private final UserMapper userMapper;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping(REGISTRATION)
     public ResponseEntity<?> registration(@RequestBody @Valid UserDto.UserRegistrationRequestDto request) {
-        User savedUser = userService.registration(userFactory.toEntity(request), passwordEncoder);
-        return new ResponseEntity<>(userFactory.toDto(savedUser), HttpStatus.CREATED);
+        User savedUser = userService.registration(userMapper.toEntity(request), passwordEncoder);
+        return new ResponseEntity<>(userMapper.toDto(savedUser), HttpStatus.CREATED);
     }
 
     @PostMapping(AUTHENTICATION)
@@ -62,15 +62,15 @@ public class AuthController {
     public ResponseEntity<?> updateAccessToken(@RequestBody @Valid RefreshTokenDto.TokenRefreshRequestDto refreshTokenRequest) {
 
         RefreshToken refreshToken = refreshTokenService.verifyExpiration(refreshTokenRequest.refreshToken());
-        UserDto userDto = userFactory.toDto(refreshToken.getUser());
+        UserDto userDto = userMapper.toDto(refreshToken.getUser());
         String token = jwtUtils.generateJwtToken(userDto.email());
 
-        return new ResponseEntity<>(userFactory.toResponseDto(userDto, refreshToken.getToken(), token), HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.toResponseDto(userDto, refreshToken.getToken(), token), HttpStatus.OK);
     }
 
     private UserDto.UserResponseDto generateAccessResponse(User user) {
-        return userFactory.toResponseDto(
-                userFactory.toDto(user),
+        return userMapper.toResponseDto(
+                userMapper.toDto(user),
                 jwtUtils.generateJwtToken(user.getEmail()),
                 refreshTokenService.createRefreshToken(user.getId()).getToken()
         );

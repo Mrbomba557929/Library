@@ -1,7 +1,8 @@
 package com.example.library.service.impl;
 
 import com.example.library.domain.dto.BookCreationDate;
-import com.example.library.exception.NotFound;
+import com.example.library.exception.business.FailedToSaveException;
+import com.example.library.exception.business.NotFound;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.service.AuthorService;
 import com.example.library.service.GenreService;
@@ -13,6 +14,7 @@ import com.example.library.specification.GenericFilter;
 import com.example.library.specification.GenericSearchParameters;
 import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.library.exception.factory.ErrorMessage.NOT_FOUND_BOOK;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @Service
@@ -83,7 +85,14 @@ public class BookServiceImpl implements BookService {
     public Book save(Book book) {
         book.setAuthors(authorService.saveAll(book.getAuthors()));
         book.setGenre(genreService.save(book.getGenre()));
-        return bookRepository.save(book);
+
+        try {
+            return bookRepository.save(book);
+        } catch (DataAccessException e) {
+            throw ErrorFactory.exceptionBuilder(e.getMessage())
+                    .status(EXPECTATION_FAILED)
+                    .build(FailedToSaveException.class);
+        }
     }
 
     @Override

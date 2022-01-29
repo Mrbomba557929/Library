@@ -1,6 +1,6 @@
 package com.example.library.specification;
 
-import com.example.library.exception.IllegalStateFilterException;
+import com.example.library.exception.business.IllegalStateFilterException;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.exception.factory.ErrorMessage;
 import org.springframework.http.HttpStatus;

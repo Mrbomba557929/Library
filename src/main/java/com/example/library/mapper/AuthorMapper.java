@@ -1,11 +1,11 @@
-package com.example.library.dtofactory;
+package com.example.library.mapper;
 
 import com.example.library.domain.model.Author;
 import com.example.library.domain.dto.AuthorDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthorFactory {
+public class AuthorMapper {
 
     public AuthorDto toDto(Author author) {
         return AuthorDto.builder()

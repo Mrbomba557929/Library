@@ -2,8 +2,8 @@ package com.example.library.controller;
 
 import com.example.library.domain.model.Book;
 import com.example.library.domain.dto.BookDto;
-import com.example.library.dtofactory.BookFactory;
-import com.example.library.dtofactory.SpecificationFactory;
+import com.example.library.mapper.BookMapper;
+import com.example.library.mapper.SpecificationMapper;
 import com.example.library.service.BookService;
 import com.example.library.specification.GenericSearchParameters;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +30,14 @@ public class BookController {
     private static final String GET_ALL_CREATION_DATES = "/books/creationDates";
 
     private final BookService bookService;
-    private final BookFactory bookFactory;
-    private final SpecificationFactory specificationFactory;
+    private final BookMapper bookMapper;
+    private final SpecificationMapper specificationMapper;
 
     @GetMapping(DEFAULT_URL)
     public ResponseEntity<?> findAll() {
         List<BookDto> books = bookService.findAll()
                 .stream()
-                .map(bookFactory::toDto)
+                .map(bookMapper::toDto)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(books, HttpStatus.OK);
@@ -45,21 +45,21 @@ public class BookController {
 
     @GetMapping(GET_COUNT_ALL_BOOKS)
     public ResponseEntity<?> getCountAllBooks() {
-        BookDto.BookCountResponse response = bookFactory.toBookCountResponse(bookService.getCountAllBooks());
+        BookDto.BookCountResponse response = bookMapper.toBookCountResponse(bookService.getCountAllBooks());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(DEFAULT_URL)
     public ResponseEntity<?> save(@Valid @RequestBody BookDto bookDto) {
-        Book book = bookFactory.toEntity(bookDto);
-        return new ResponseEntity<>(bookFactory.toDto(bookService.save(book)), HttpStatus.OK);
+        Book book = bookMapper.toEntity(bookDto);
+        return new ResponseEntity<>(bookMapper.toDto(bookService.save(book)), HttpStatus.OK);
     }
 
     @PutMapping(DEFAULT_URL)
     public ResponseEntity<?> edit(@Valid @RequestBody BookDto bookDto) {
-        Book book = bookFactory.toEntity(bookDto);
+        Book book = bookMapper.toEntity(bookDto);
         log.info(book);
-        return new ResponseEntity<>(bookFactory.toDto(bookService.edit(book)), HttpStatus.OK);
+        return new ResponseEntity<>(bookMapper.toDto(bookService.edit(book)), HttpStatus.OK);
     }
 
     @DeleteMapping(DEFAULT_URL)
@@ -77,8 +77,8 @@ public class BookController {
                                      @RequestParam(name = "search", required = false, defaultValue = "") String search,
                                      @RequestParam("page") int page,
                                      @RequestParam("count") int count) {
-        GenericSearchParameters parameters = specificationFactory.toSearchParameters(authors, genres, from, to, search, sort);
-        Page<BookDto> books = bookService.findAll(page, count, parameters).map(bookFactory::toDto);
+        GenericSearchParameters parameters = specificationMapper.toSearchParameters(authors, genres, from, to, search, sort);
+        Page<BookDto> books = bookService.findAll(page, count, parameters).map(bookMapper::toDto);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 

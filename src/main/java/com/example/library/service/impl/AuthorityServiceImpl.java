@@ -2,7 +2,7 @@ package com.example.library.service.impl;
 
 import com.example.library.domain.model.Authority;
 import com.example.library.domain.еnum.Role;
-import com.example.library.exception.NotFound;
+import com.example.library.exception.business.NotFound;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.repository.AuthorityRepository;
 import com.example.library.service.AuthorityService;

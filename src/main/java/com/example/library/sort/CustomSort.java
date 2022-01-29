@@ -1,12 +1,10 @@
 package com.example.library.sort;
 
 import com.example.library.exception.factory.ErrorFactory;
-import com.example.library.exception.factory.ErrorMessage;
-import com.example.library.exception.SortingException;
+import com.example.library.exception.business.SortingException;
 import com.google.common.base.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -14,6 +12,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static com.example.library.exception.factory.ErrorMessage.SORTING_EXCEPTION;
+import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 @Component
 public class CustomSort<T> implements Comparator<String> {
@@ -52,8 +53,8 @@ public class CustomSort<T> implements Comparator<String> {
                 return numericDirection * compare(firstName1, firstName2);
 
             } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
-                throw ErrorFactory.exceptionBuilder(ErrorMessage.SORTING_EXCEPTION)
-                        .status(HttpStatus.EXPECTATION_FAILED)
+                throw ErrorFactory.exceptionBuilder(SORTING_EXCEPTION)
+                        .status(EXPECTATION_FAILED)
                         .build(SortingException.class);
             }
 

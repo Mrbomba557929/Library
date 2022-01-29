@@ -1,11 +1,11 @@
-package com.example.library.dtofactory;
+package com.example.library.mapper;
 
 import com.example.library.domain.dto.UserDto;
 import com.example.library.domain.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserFactory {
+public class UserMapper {
 
     public User toEntity(UserDto.UserRegistrationRequestDto userRegistrationRequestDto) {
         return User.builder()

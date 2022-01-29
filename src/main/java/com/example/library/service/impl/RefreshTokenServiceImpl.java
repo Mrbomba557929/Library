@@ -1,14 +1,16 @@
 package com.example.library.service.impl;
 
 import com.example.library.domain.model.RefreshToken;
-import com.example.library.exception.NotFound;
-import com.example.library.exception.TokenExpiredException;
+import com.example.library.exception.business.FailedToSaveException;
+import com.example.library.exception.business.NotFound;
+import com.example.library.exception.business.TokenExpiredException;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.repository.RefreshTokenRepository;
 import com.example.library.service.RefreshTokenService;
 import com.example.library.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -16,8 +18,7 @@ import java.util.UUID;
 
 import static com.example.library.exception.factory.ErrorMessage.REFRESH_TOKEN_NOT_FOUND;
 import static com.example.library.exception.factory.ErrorMessage.TOKEN_EXPIRED;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,21 +32,28 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken findByToken(String token) {
-        return refreshTokenRepository.findByToken(token)
-                .orElseThrow(() ->
-                        ErrorFactory.exceptionBuilder(REFRESH_TOKEN_NOT_FOUND)
-                                .status(NOT_FOUND)
-                                .build(NotFound.class)
-                );
+        try {
+            return refreshTokenRepository.getByToken(token);
+        } catch (DataAccessException e) {
+            throw ErrorFactory.exceptionBuilder(REFRESH_TOKEN_NOT_FOUND)
+                    .status(NOT_FOUND)
+                    .build(NotFound.class);
+        }
     }
 
     @Override
     public RefreshToken createRefreshToken(Long id) {
-        return refreshTokenRepository.save(
-                Instant.now().plusMillis(refreshTokenDurationMs),
-                UUID.randomUUID().toString(),
-                userService.findById(id).getId()
-        );
+        try {
+            return refreshTokenRepository.save(
+                    Instant.now().plusMillis(refreshTokenDurationMs),
+                    UUID.randomUUID().toString(),
+                    userService.findById(id).getId()
+            );
+        } catch (DataAccessException e) {
+            throw ErrorFactory.exceptionBuilder(e.getMessage())
+                    .status(EXPECTATION_FAILED)
+                    .build(FailedToSaveException.class);
+        }
     }
 
     @Override
@@ -63,7 +71,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public void deleteByUserUUID(Long id) {
+    public void deleteByUserId(Long id) {
         refreshTokenRepository.deleteByUserId(id);
     }
 }

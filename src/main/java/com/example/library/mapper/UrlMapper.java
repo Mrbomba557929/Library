@@ -1,11 +1,11 @@
-package com.example.library.dtofactory;
+package com.example.library.mapper;
 
 import com.example.library.domain.model.Url;
 import com.example.library.domain.dto.UrlDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UrlFactory {
+public class UrlMapper {
 
     public UrlDto toDto(Url url) {
         return UrlDto.builder()

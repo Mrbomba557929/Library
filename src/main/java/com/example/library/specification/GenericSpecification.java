@@ -1,6 +1,6 @@
 package com.example.library.specification;
 
-import com.example.library.exception.SearchOperationNotSupportedException;
+import com.example.library.exception.business.SearchOperationNotSupportedException;
 import com.example.library.exception.factory.ErrorFactory;
 import org.springframework.data.jpa.domain.Specification;
 

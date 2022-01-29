@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorMessage {
-
     NOT_FOUND_BOOK("Error: the specified book was not found!"),
     NOT_FOUND_GENRE("Error: the specified genre was not found!"),
     NOT_FOUND_USER_EXCEPTION("Error: the target user was not found!"),

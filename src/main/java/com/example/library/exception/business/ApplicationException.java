@@ -1,4 +1,4 @@
-package com.example.library.exception;
+package com.example.library.exception.business;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public abstract class ApplicationException extends RuntimeException {
-    private HttpStatus status;
-    private String link;
-    private String message;
-    private String developerMessage;
+    protected HttpStatus status;
+    protected String link;
+    protected String message;
+    protected Throwable cause;
 }

@@ -33,5 +33,5 @@ public interface RefreshTokenService {
      *
      * @param id is an id, by which we will delete {@link RefreshToken} entity.
      */
-    void deleteByUserUUID(Long id);
+    void deleteByUserId(Long id);
 }

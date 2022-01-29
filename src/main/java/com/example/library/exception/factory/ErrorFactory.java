@@ -1,7 +1,7 @@
 package com.example.library.exception.factory;
 
-import com.example.library.exception.ApplicationException;
-import com.example.library.exception.UnknownExceptionClassException;
+import com.example.library.exception.business.ApplicationException;
+import com.example.library.exception.business.UnknownExceptionClassException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -14,24 +14,25 @@ public class ErrorFactory {
         return new Builder(errorCode);
     }
 
+    public static Builder exceptionBuilder(String message) {
+        return new Builder(message);
+    }
+
     public static class Builder {
         private HttpStatus status;
-        private int code;
         private String link;
-        private String developerMessage;
         private final String message;
 
         public Builder(ErrorMessage errorCode) {
             this.message = errorCode.getMessage();
         }
 
-        public Builder status(HttpStatus status) {
-            this.status = status;
-            return this;
+        public Builder(String message) {
+            this.message = message;
         }
 
-        public Builder developerMessage(String developerMessage) {
-            this.developerMessage = developerMessage;
+        public Builder status(HttpStatus status) {
+            this.status = status;
             return this;
         }
 
@@ -48,11 +49,8 @@ public class ErrorFactory {
                 res.setLink(link);
                 res.setMessage(message);
                 res.setStatus(status);
-                res.setDeveloperMessage(developerMessage);
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                throw ErrorFactory.exceptionBuilder(ErrorMessage.UNKNOWN_EXCEPTION_CLASS)
-                        .status(HttpStatus.EXPECTATION_FAILED)
-                        .build(UnknownExceptionClassException.class);
+                throw new UnknownExceptionClassException();
             }
 
             return res;

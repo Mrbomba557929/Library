@@ -1,4 +1,4 @@
-package com.example.library.dtofactory;
+package com.example.library.mapper;
 
 import com.example.library.specification.GenericSearchParameters;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 @Component
-public class SpecificationFactory {
+public class SpecificationMapper {
 
     public GenericSearchParameters toSearchParameters(String authors, String genres, Integer from,
                                                       Integer to, String search, String sort) {

@@ -1,11 +1,11 @@
-package com.example.library.dtofactory;
+package com.example.library.mapper;
 
 import com.example.library.domain.model.Genre;
 import com.example.library.domain.dto.GenreDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GenreFactory {
+public class GenreMapper {
 
     public GenreDto toDto(Genre genre) {
         return GenreDto.builder()

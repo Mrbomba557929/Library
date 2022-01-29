@@ -1,7 +1,7 @@
 package com.example.library.controller;
 
 import com.example.library.domain.dto.AuthorDto;
-import com.example.library.dtofactory.AuthorFactory;
+import com.example.library.mapper.AuthorMapper;
 import com.example.library.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,13 +23,13 @@ public class AuthorController {
     private final static String FIND_ALL = "/authors";
 
     private final AuthorService authorService;
-    private final AuthorFactory authorFactory;
+    private final AuthorMapper authorMapper;
 
     @GetMapping(FIND_ALL)
     public ResponseEntity<?> findAll() {
         List<AuthorDto> authorDtos = authorService.findAll()
                 .stream()
-                .map(authorFactory::toDto)
+                .map(authorMapper::toDto)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(authorDtos, HttpStatus.OK);

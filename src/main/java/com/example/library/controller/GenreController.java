@@ -1,7 +1,7 @@
 package com.example.library.controller;
 
 import com.example.library.domain.dto.GenreDto;
-import com.example.library.dtofactory.GenreFactory;
+import com.example.library.mapper.GenreMapper;
 import com.example.library.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,13 +23,13 @@ public class GenreController {
     private final static String FIND_ALL = "/genres";
 
     private final GenreService genreService;
-    private final GenreFactory genreFactory;
+    private final GenreMapper genreMapper;
 
     @GetMapping(FIND_ALL)
     public ResponseEntity<?> findAll() {
         List<GenreDto> genreDtos = genreService.findAll()
                 .stream()
-                .map(genreFactory::toDto)
+                .map(genreMapper::toDto)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(genreDtos, HttpStatus.OK);
