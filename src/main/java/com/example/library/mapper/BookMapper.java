@@ -1,7 +1,7 @@
 package com.example.library.mapper;
 
 import com.example.library.domain.model.Book;
-import com.example.library.domain.dto.BookDto;
+import com.example.library.domain.dto.base.BookDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +23,6 @@ public class BookMapper {
                 .authors(book.getAuthors().stream().map(authorMapper::toDto).collect(Collectors.toList()))
                 .genre(genreMapper.toDto(book.getGenre()))
                 .url(book.getUrl() == null ? null : urlMapper.toDto(book.getUrl()))
-                .build();
-    }
-
-    public BookDto.BookCountResponse toBookCountResponse(long count) {
-        return BookDto.BookCountResponse.builder()
-                .count(count)
-                .message("number of books")
                 .build();
     }
 

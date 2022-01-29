@@ -1,4 +1,4 @@
-package com.example.library.domain.dto;
+package com.example.library.domain.dto.base;
 
 import java.io.Serializable;
 import java.time.LocalDate;

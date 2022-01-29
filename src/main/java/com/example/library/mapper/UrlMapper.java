@@ -1,7 +1,7 @@
 package com.example.library.mapper;
 
 import com.example.library.domain.model.Url;
-import com.example.library.domain.dto.UrlDto;
+import com.example.library.domain.dto.base.UrlDto;
 import org.springframework.stereotype.Component;
 
 @Component

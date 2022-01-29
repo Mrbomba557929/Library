@@ -1,8 +1,8 @@
-package com.example.library.controller;
+package com.example.library.controller.api;
 
-import com.example.library.domain.dto.AuthorDto;
-import com.example.library.mapper.AuthorMapper;
-import com.example.library.service.AuthorService;
+import com.example.library.domain.dto.base.GenreDto;
+import com.example.library.mapper.GenreMapper;
+import com.example.library.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,20 +18,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
-public class AuthorController {
+public class GenreController {
 
-    private final static String FIND_ALL = "/authors";
+    private final static String FIND_ALL = "/genres";
 
-    private final AuthorService authorService;
-    private final AuthorMapper authorMapper;
+    private final GenreService genreService;
+    private final GenreMapper genreMapper;
 
     @GetMapping(FIND_ALL)
     public ResponseEntity<?> findAll() {
-        List<AuthorDto> authorDtos = authorService.findAll()
+        List<GenreDto> genreDtos = genreService.findAll()
                 .stream()
-                .map(authorMapper::toDto)
+                .map(genreMapper::toDto)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(authorDtos, HttpStatus.OK);
+        return new ResponseEntity<>(genreDtos, HttpStatus.OK);
     }
 }

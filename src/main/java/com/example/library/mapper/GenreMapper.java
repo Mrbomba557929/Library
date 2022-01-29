@@ -1,7 +1,7 @@
 package com.example.library.mapper;
 
 import com.example.library.domain.model.Genre;
-import com.example.library.domain.dto.GenreDto;
+import com.example.library.domain.dto.base.GenreDto;
 import org.springframework.stereotype.Component;
 
 @Component

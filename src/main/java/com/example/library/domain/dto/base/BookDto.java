@@ -1,11 +1,9 @@
-package com.example.library.domain.dto;
+package com.example.library.domain.dto.base;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -37,13 +35,5 @@ public record BookDto(Long id,
         this.authors = authors;
         this.genre = genre;
         this.url = url;
-    }
-
-    @Builder
-    @Setter
-    @Getter
-    public static class BookCountResponse {
-        private String message;
-        private long count;
     }
 }

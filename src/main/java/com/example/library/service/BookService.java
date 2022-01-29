@@ -1,6 +1,6 @@
 package com.example.library.service;
 
-import com.example.library.domain.dto.BookCreationDate;
+import com.example.library.domain.dto.base.BookCreationDate;
 import com.example.library.domain.model.Book;
 import com.example.library.specification.GenericSearchParameters;
 import org.springframework.data.domain.Page;
@@ -23,13 +23,6 @@ public interface BookService {
      * @return list of a {@link Book} entities on page.
      */
     List<Book> findAll();
-
-    /**
-     * Method to retrieve count all books.
-     *
-     * @return count all books.
-     */
-    long getCountAllBooks();
 
     /**
      * Method to find all a {@link Book} entities.

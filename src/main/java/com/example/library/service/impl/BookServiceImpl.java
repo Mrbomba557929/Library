@@ -1,6 +1,6 @@
 package com.example.library.service.impl;
 
-import com.example.library.domain.dto.BookCreationDate;
+import com.example.library.domain.dto.base.BookCreationDate;
 import com.example.library.exception.business.FailedToSaveException;
 import com.example.library.exception.business.NotFound;
 import com.example.library.exception.factory.ErrorFactory;
@@ -51,11 +51,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findAll() {
         return bookRepository.findAll();
-    }
-
-    @Override
-    public long getCountAllBooks() {
-        return bookRepository.getCountAllBooks();
     }
 
     @Override

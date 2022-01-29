@@ -1,6 +1,6 @@
 package com.example.library.mapper;
 
-import com.example.library.domain.dto.UserDto;
+import com.example.library.domain.dto.base.UserDto;
 import com.example.library.domain.model.User;
 import org.springframework.stereotype.Component;
 

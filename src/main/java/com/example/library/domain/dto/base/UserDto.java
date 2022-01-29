@@ -1,4 +1,4 @@
-package com.example.library.domain.dto;
+package com.example.library.domain.dto.base;
 
 import com.example.library.domain.model.Authority;
 import com.fasterxml.jackson.annotation.JsonCreator;

@@ -1,7 +1,7 @@
-package com.example.library.controller;
+package com.example.library.controller.api;
 
-import com.example.library.domain.dto.RefreshTokenDto;
-import com.example.library.domain.dto.UserDto;
+import com.example.library.domain.dto.base.RefreshTokenDto;
+import com.example.library.domain.dto.base.UserDto;
 import com.example.library.domain.model.RefreshToken;
 import com.example.library.domain.model.User;
 import com.example.library.mapper.UserMapper;

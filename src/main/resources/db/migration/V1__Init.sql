@@ -22,7 +22,7 @@ CREATE TABLE books
     name        TEXT,
     creation_at TIMESTAMP,
     genre       TEXT,
-    added_at    TIMESTAMP,
+    added_at    TIMESTAMP DEFAULT now(),
     user_id     INTEGER,
     url_id      INTEGER
 );
@@ -59,6 +59,12 @@ CREATE TABLE refresh_tokens
     token       TEXT UNIQUE,
     expiry_date TIMESTAMP,
     user_id     INTEGER
+);
+
+CREATE TABLE stats
+(
+    count BIGINT,
+    date TIMESTAMP DEFAULT now()
 );
 
 ALTER TABLE books

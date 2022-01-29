@@ -1,6 +1,6 @@
 package com.example.library.repository;
 
-import com.example.library.domain.dto.BookCreationDate;
+import com.example.library.domain.dto.base.BookCreationDate;
 import com.example.library.domain.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -24,9 +24,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             """, nativeQuery = true)
     Optional<Book> findById(Long id);
 
-    @Query(value = "SELECT COUNT(*) FROM books", nativeQuery = true)
-    long getCountAllBooks();
-
     @Override
     @Query(value = """
             SELECT bk.id, bk.name, bk.creation_at, bk.added_at, bk.genre, bk.url_id
@@ -38,7 +35,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     List<Book> findAll();
 
     @Query(value = """
-            SELECT new com.example.library.domain.dto.BookCreationDate(book.creationAt)
+            SELECT new com.example.library.domain.dto.base.BookCreationDate(book.creationAt)
             FROM Book book""")
     List<BookCreationDate> getCreationDates();
 }

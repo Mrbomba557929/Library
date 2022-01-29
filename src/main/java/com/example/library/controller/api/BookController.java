@@ -1,10 +1,12 @@
-package com.example.library.controller;
+package com.example.library.controller.api;
 
+import com.example.library.domain.dto.base.BookStatsDto;
 import com.example.library.domain.model.Book;
-import com.example.library.domain.dto.BookDto;
+import com.example.library.domain.dto.base.BookDto;
 import com.example.library.mapper.BookMapper;
 import com.example.library.mapper.SpecificationMapper;
 import com.example.library.service.BookService;
+import com.example.library.service.BookStatsService;
 import com.example.library.specification.GenericSearchParameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,11 +27,11 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private static final String DEFAULT_URL = "/books";
-    private static final String GET_COUNT_ALL_BOOKS = "/books/count";
     private static final String PAGINATE_ALL_BOOKS = "/books/paginated";
     private static final String GET_ALL_CREATION_DATES = "/books/creationDates";
 
     private final BookService bookService;
+    private final BookStatsService bookStatsService;
     private final BookMapper bookMapper;
     private final SpecificationMapper specificationMapper;
 
@@ -41,12 +43,6 @@ public class BookController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
-    @GetMapping(GET_COUNT_ALL_BOOKS)
-    public ResponseEntity<?> getCountAllBooks() {
-        BookDto.BookCountResponse response = bookMapper.toBookCountResponse(bookService.getCountAllBooks());
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(DEFAULT_URL)

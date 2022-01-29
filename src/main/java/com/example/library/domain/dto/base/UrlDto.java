@@ -1,14 +1,14 @@
-package com.example.library.domain.dto;
+package com.example.library.domain.dto.base;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
-public record AuthorDto(String fio) {
+public record UrlDto(String url) {
 
     @Builder
     @JsonCreator
-    public AuthorDto(@JsonProperty("fio") String fio) {
-        this.fio = fio;
+    public UrlDto(@JsonProperty("url") String url) {
+        this.url = url;
     }
 }
