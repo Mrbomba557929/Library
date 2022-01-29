@@ -75,7 +75,6 @@ public class BookStatsController {
     @GetMapping(GET_COUNT_ALL_BOOKS)
     public ResponseEntity<?> getCountAllBooks() {
         BookStatsDto.BookCountDto bookCountDto = bookStatsMapper.toBookCountResponse(bookStatsService.getNumberOfAllBooks());
-
         return new ResponseEntity<>(bookCountDto, HttpStatus.OK);
     }
 }

@@ -6,7 +6,6 @@ import com.example.library.exception.business.NotFound;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.service.AuthorService;
 import com.example.library.service.GenreService;
-import com.example.library.sort.CustomSort;
 import com.example.library.domain.model.Book;
 import com.example.library.repository.BookRepository;
 import com.example.library.service.BookService;
@@ -35,7 +34,6 @@ public class BookServiceImpl implements BookService {
     private final GenreService genreService;
     private final AuthorService authorService;
     private final GenericFilter<Book> filter;
-    private final CustomSort<Book> customSort;
 
     @Override
     public Book findById(Long id) {
@@ -62,8 +60,7 @@ public class BookServiceImpl implements BookService {
             Sort.Direction direction = Sort.Direction.fromString(sortParameters[1]);
 
             if (sortParameters[0].equalsIgnoreCase("authors")) {
-                Page<Book> books = bookRepository.findAll(specification, PageRequest.of(page, count));
-                return customSort.sort(books, direction, "authors", "fio");
+                return bookRepository.findAllSortedByFirstElementFromAuthorsList(direction.name(), PageRequest.of(page, count));
             }
 
             return bookRepository.findAll(specification, PageRequest.of(page, count, Sort.by(direction, sortParameters[0])));

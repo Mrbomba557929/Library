@@ -1,12 +1,10 @@
 package com.example.library.controller.api;
 
-import com.example.library.domain.dto.base.BookStatsDto;
 import com.example.library.domain.model.Book;
 import com.example.library.domain.dto.base.BookDto;
 import com.example.library.mapper.BookMapper;
 import com.example.library.mapper.SpecificationMapper;
 import com.example.library.service.BookService;
-import com.example.library.service.BookStatsService;
 import com.example.library.specification.GenericSearchParameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,7 +29,6 @@ public class BookController {
     private static final String GET_ALL_CREATION_DATES = "/books/creationDates";
 
     private final BookService bookService;
-    private final BookStatsService bookStatsService;
     private final BookMapper bookMapper;
     private final SpecificationMapper specificationMapper;
 
@@ -54,7 +51,6 @@ public class BookController {
     @PutMapping(DEFAULT_URL)
     public ResponseEntity<?> edit(@Valid @RequestBody BookDto bookDto) {
         Book book = bookMapper.toEntity(bookDto);
-        log.info(book);
         return new ResponseEntity<>(bookMapper.toDto(bookService.edit(book)), HttpStatus.OK);
     }
 

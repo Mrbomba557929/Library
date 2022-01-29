@@ -53,6 +53,7 @@ public record GenericSpecification<T>(SpecificationCriteria specificationCriteri
             }
             default -> throw ErrorFactory.exceptionBuilder(SEARCH_OPERATION_NOT_SUPPORTED)
                         .status(EXPECTATION_FAILED)
+                        .link("GenericSpecification/getPredicate")
                         .build(SearchOperationNotSupportedException.class);
         }
     }
