@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static com.example.library.exception.factory.ErrorMessage.SORTING_EXCEPTION;
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 @Component
@@ -53,8 +52,9 @@ public class CustomSort<T> implements Comparator<String> {
                 return numericDirection * compare(firstName1, firstName2);
 
             } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
-                throw ErrorFactory.exceptionBuilder(SORTING_EXCEPTION)
+                throw ErrorFactory.exceptionBuilder(e.getMessage())
                         .status(EXPECTATION_FAILED)
+                        .link("CustomSort/sort")
                         .build(SortingException.class);
             }
 

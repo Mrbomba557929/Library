@@ -43,6 +43,7 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() ->
                         ErrorFactory.exceptionBuilder(NOT_FOUND_BOOK)
                                 .status(NOT_FOUND)
+                                .link("BookServiceImpl/findById")
                                 .build(NotFound.class)
                 );
     }
@@ -91,6 +92,7 @@ public class BookServiceImpl implements BookService {
         } catch (DataAccessException e) {
             throw ErrorFactory.exceptionBuilder(e.getMessage())
                     .status(EXPECTATION_FAILED)
+                    .link("BookServiceImpl/save")
                     .build(FailedToSaveException.class);
         }
     }
@@ -105,6 +107,7 @@ public class BookServiceImpl implements BookService {
 
         throw ErrorFactory.exceptionBuilder(NOT_FOUND_BOOK)
                 .status(NOT_FOUND)
+                .link("BookServiceImpl/edit")
                 .build(NotFound.class);
     }
 

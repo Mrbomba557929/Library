@@ -27,6 +27,7 @@ public class UrlServiceImpl implements UrlService {
         } catch (DataAccessException e) {
             throw ErrorFactory.exceptionBuilder(e.getMessage())
                     .status(EXPECTATION_FAILED)
+                    .link("UrlServiceImpl/save")
                     .build(FailedToSaveException.class);
         }
     }

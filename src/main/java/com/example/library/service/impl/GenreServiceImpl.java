@@ -34,6 +34,7 @@ public class GenreServiceImpl implements GenreService {
         } catch (DataAccessException e) {
             throw ErrorFactory.exceptionBuilder(e.getMessage())
                     .status(BAD_REQUEST)
+                    .link("GenreServiceImpl/save")
                     .build(FailedToSaveException.class);
         }
     }

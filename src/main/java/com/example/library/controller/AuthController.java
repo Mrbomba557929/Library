@@ -55,6 +55,7 @@ public class AuthController {
 
         throw ErrorFactory.exceptionBuilder(AUTHENTICATION_EXCEPTION)
                 .status(UNAUTHORIZED)
+                .link("AuthController/authentication")
                 .build(AuthenticationException.class);
     }
 

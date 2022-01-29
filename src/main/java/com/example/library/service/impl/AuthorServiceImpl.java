@@ -30,15 +30,18 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> saveAll(List<Author> authors) {
-        try {
-            return authors.stream()
-                    .map(author -> authorRepository.save(author.getFio()))
-                    .collect(Collectors.toList());
-        } catch (DataAccessException e) {
-            throw ErrorFactory.exceptionBuilder(e.getMessage())
-                    .status(EXPECTATION_FAILED)
-                    .build(FailedToSaveException.class);
-        }
+        return authors.stream()
+                .map(author -> {
+                    try {
+                        return authorRepository.save(author.getFio());
+                    } catch (DataAccessException e) {
+                        throw ErrorFactory.exceptionBuilder(e.getMessage())
+                                .status(EXPECTATION_FAILED)
+                                .link("AuthorServiceImpl/saveAll")
+                                .build(FailedToSaveException.class);
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

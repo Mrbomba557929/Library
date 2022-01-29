@@ -32,13 +32,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken findByToken(String token) {
-        try {
-            return refreshTokenRepository.getByToken(token);
-        } catch (DataAccessException e) {
-            throw ErrorFactory.exceptionBuilder(REFRESH_TOKEN_NOT_FOUND)
-                    .status(NOT_FOUND)
-                    .build(NotFound.class);
-        }
+        return refreshTokenRepository.findByToken(token)
+                .orElseThrow(() ->
+                        ErrorFactory.exceptionBuilder(REFRESH_TOKEN_NOT_FOUND)
+                                .status(NOT_FOUND)
+                                .link("RefreshTokenServiceImpl/findByToken")
+                                .build(NotFound.class));
     }
 
     @Override
@@ -52,6 +51,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         } catch (DataAccessException e) {
             throw ErrorFactory.exceptionBuilder(e.getMessage())
                     .status(EXPECTATION_FAILED)
+                    .link("RefreshTokenServiceImpl/createRefreshToken")
                     .build(FailedToSaveException.class);
         }
     }
@@ -64,6 +64,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             refreshTokenRepository.delete(refreshToken);
             throw ErrorFactory.exceptionBuilder(TOKEN_EXPIRED)
                     .status(FORBIDDEN)
+                    .link("RefreshTokenServiceImpl/verifyExpiration")
                     .build(TokenExpiredException.class);
         }
 

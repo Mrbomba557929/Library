@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
@@ -16,7 +17,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
             SELECT *
             FROM refresh_tokens
             WHERE refresh_tokens.token = ?1""", nativeQuery = true)
-    RefreshToken getByToken(String token);
+    Optional<RefreshToken> findByToken(String token);
 
     @Query(value = """
             INSERT INTO refresh_tokens (expiry_date, token, user_id)

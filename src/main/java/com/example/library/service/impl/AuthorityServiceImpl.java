@@ -24,6 +24,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                 .orElseThrow(() ->
                         ErrorFactory.exceptionBuilder(NOT_FOUND_AUTHORITY_EXCEPTION)
                                 .status(NOT_FOUND)
+                                .link("AuthorityServiceImpl/findByRole")
                                 .build(NotFound.class)
                 );
     }
