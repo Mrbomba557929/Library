@@ -6,19 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-@Transactional
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 
-    @Override
-    @Query(value = """
-            SELECT genre
-            FROM genres
-            """, nativeQuery = true)
-    List<Genre> findAll();
-
+    @Transactional
     @Query(value = """
             WITH e AS (
                 INSERT INTO genres (genre) VALUES (?1)

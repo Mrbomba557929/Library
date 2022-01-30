@@ -19,6 +19,8 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
             WHERE refresh_tokens.token = ?1""", nativeQuery = true)
     Optional<RefreshToken> findByToken(String token);
 
+    @Transactional
+    @Modifying
     @Query(value = """
             INSERT INTO refresh_tokens (expiry_date, token, user_id)
                 VALUES (?1, ?2, ?3)

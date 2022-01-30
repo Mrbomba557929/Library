@@ -19,14 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     @Query(value = """
-            SELECT users.id, users.email, users.password
-            FROM users
-            INNER JOIN users_authorities ua on users.id = ua.user_id
-            INNER JOIN authorities a on ua.authority_id = a.id
-            WHERE users.id = ?1""", nativeQuery = true)
-    Optional<User> findById(Long id);
-
-    @Query(value = """
             WITH e AS (
                 INSERT INTO users_authorities (user_id, authority_id)
                     VALUES (?1, ?2)

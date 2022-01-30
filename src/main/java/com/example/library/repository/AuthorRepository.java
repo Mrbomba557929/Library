@@ -7,19 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-@Transactional
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    @Override
-    @Query(value = """
-            SELECT a.id, a.fio
-            FROM authors a
-            """, nativeQuery = true)
-    List<Author> findAll();
-
+    @Transactional
     @Modifying
     @Query(value = """
             INSERT INTO authors_books
@@ -27,6 +18,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
             """, nativeQuery = true)
     void addBook(Long idBook, Long idAuthor);
 
+    @Transactional
     @Query(value = """
             WITH e AS (
                 INSERT INTO authors (fio) VALUES (?1)

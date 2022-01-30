@@ -91,3 +91,42 @@ ALTER TABLE books
 ALTER TABLE books
     ADD FOREIGN KEY (url_id) REFERENCES urls (id)
         ON DELETE CASCADE;
+
+INSERT INTO authors (fio)
+VALUES
+    ('Вася Пупкин'),
+    ('Дима Дудкин'),
+    ('Артём Муткин'),
+    ('Алексей Бакукин');
+
+INSERT INTO urls (url)
+VALUES
+    ('https://vk.com/im?peers=313873506_c19_c21'),
+    ('https://vk.com/im?peers=534534543'),
+    ('https://vk.com/im?peers=31387350867867876876');
+
+INSERT INTO genres (genre)
+VALUES
+    ('Роман'),
+    ('Путешествие'),
+    ('Детектив'),
+    ('Баракутин');
+
+INSERT INTO books (name, creation_at, genre, added_at, url_id)
+VALUES
+    ('Пупка', '04-04-2004', 'Роман', '04-04-2004', 1),
+    ('Дудка', '04-04-2004', 'Детектив', '04-04-2004', 2),
+    ('Мутка', '04-04-2004', 'Путешествие', '04-04-2004', 3),
+    ('Путка', '04-04-2004', 'Баракутин', '04-04-2004', 2);
+
+INSERT INTO authors_books (author_id, book_id)
+VALUES
+    (1, 1),
+       (1, 2),
+       (1, 3),
+       (2, 2),
+       (2, 3),
+       (2, 4),
+       (3, 1),
+       (3, 3),
+       (4, 4);
