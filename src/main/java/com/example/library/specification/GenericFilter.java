@@ -43,6 +43,7 @@ public class GenericFilter<T> {
         } catch (IllegalStateException | IllegalAccessException e) {
            throw ErrorFactory.exceptionBuilder(ErrorMessage.ILLEGAL_STATE_FILTER)
                    .status(HttpStatus.EXPECTATION_FAILED)
+                   .link("GenericFilter/filterBy")
                    .build(IllegalStateFilterException.class);
         }
 
