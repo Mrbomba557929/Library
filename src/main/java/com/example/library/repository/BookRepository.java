@@ -45,7 +45,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             SELECT COUNT(*)
             FROM books
             INNER JOIN concate_fios ON concate_fios.id = books.id
-            GROUP BY books.name
             """, nativeQuery = true)
     Page<Book> findAllSortedByFirstElementFromAuthorsListASC(Pageable pageable);
 
@@ -75,7 +74,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             SELECT COUNT(*)
             FROM books
             INNER JOIN concate_fios ON concate_fios.id = books.id
-            GROUP BY books.name
             """, nativeQuery = true)
     Page<Book> findAllSortedByFirstElementFromAuthorsListDESC(Pageable pageable);
 }
