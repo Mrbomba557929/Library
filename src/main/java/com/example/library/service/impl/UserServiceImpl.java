@@ -45,12 +45,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addAuthorityAndReturnUser(Long userId, Long authorityId) {
-        return userRepository.addAuthorityAndReturnUser(userId, authorityId)
-                .orElseThrow(() ->
-                        ErrorFactory.exceptionBuilder(NOT_FOUND_USER_EXCEPTION)
-                                .status(NOT_FOUND)
-                                .link("UserServiceImpl/addAuthorityAndReturnUser")
-                                .build(NotFound.class));
+        try {
+            return userRepository.addAuthorityAndReturnUser(userId, authorityId)
+                    .orElseThrow(() ->
+                            ErrorFactory.exceptionBuilder(NOT_FOUND_USER_EXCEPTION)
+                                    .status(NOT_FOUND)
+                                    .link("UserServiceImpl/addAuthorityAndReturnUser")
+                                    .build(NotFound.class)
+                    );
+        } catch (DataAccessException e) {
+            throw ErrorFactory.exceptionBuilder(e.getMessage())
+                    .status(EXPECTATION_FAILED)
+                    .link("UserServiceImpl/addAuthorityAndReturnUser")
+                    .build(FailedToSaveException.class);
+        }
     }
 
     @Override

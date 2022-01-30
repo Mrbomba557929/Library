@@ -25,9 +25,12 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
                 ON CONFLICT ON CONSTRAINT authors_fio_key DO NOTHING
                 RETURNING id, fio
             )
-            SELECT id, fio FROM e
+                SELECT *
+                FROM e
             UNION
-            SELECT id, fio FROM authors WHERE fio=?1
+                SELECT *
+                FROM authors
+                WHERE fio=?1
             """, nativeQuery = true)
     Author save(String fio);
 }

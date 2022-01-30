@@ -16,8 +16,11 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
                 ON CONFLICT ON CONSTRAINT genres_pkey DO NOTHING
                 RETURNING genre
             )
-            SELECT genre FROM e
+                SELECT *
+                FROM e
             UNION
-            SELECT genre FROM genres WHERE genre=?1""", nativeQuery = true)
+                SELECT *
+                FROM genres
+                WHERE genre=?1""", nativeQuery = true)
     Genre save(String genre);
 }

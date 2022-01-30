@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = """
-            SELECT users.id, users.email, users.password
+            SELECT *
             FROM users
             INNER JOIN users_authorities ua on users.id = ua.user_id
             INNER JOIN authorities a on ua.authority_id = a.id
@@ -21,30 +21,33 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = """
             WITH e AS (
                 INSERT INTO users_authorities (user_id, authority_id)
-                    VALUES (?1, ?2)
+                VALUES (?1, ?2)
                 RETURNING user_id, authority_id
             )
             SELECT *
-            FROM users
-            WHERE users.id = e.user_id
-            """, nativeQuery = true)
+            FROM e
+            INNER JOIN users ON e.user_id = users.id;
+                        """, nativeQuery = true)
     Optional<User> addAuthorityAndReturnUser(Long userId, Long authorityId);
 
     @Query(value = """
-           WITH e AS (
-                INSERT INTO users (email, password)
-                    VALUES (?1, ?2)
-                RETURNING id, email, password
-           )
-           SELECT * FROM e
-           """, nativeQuery = true)
+            WITH e AS (
+                 INSERT INTO users (email, password)
+                     VALUES (?1, ?2)
+                 RETURNING id, email, password
+            )
+            SELECT *
+            FROM e
+            """, nativeQuery = true)
     User save(String email, String password);
 
     @Query(value = """
             SELECT
                 CASE WHEN EXISTS
                 (
-                    SELECT * FROM users WHERE users.email = ?1
+                    SELECT *
+                    FROM users
+                    WHERE users.email = ?1
                 )
                 THEN true
                 ELSE false

@@ -28,11 +28,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             	INNER JOIN authors on authors_books.author_id = authors.id
             	GROUP BY books.id
             )
-            SELECT
-                authors.id, authors.fio,
-                books.id, books.creation_at,
-                books.added_at, genres.genre,
-                urls.id, urls.url
+            SELECT *
             FROM books
             INNER JOIN authors_books on authors_books.book_id = books.id
             INNER JOIN authors on authors_books.author_id = authors.id
