@@ -5,6 +5,7 @@ import com.example.library.domain.dto.base.BookDto;
 import com.example.library.mapper.BookMapper;
 import com.example.library.mapper.SpecificationMapper;
 import com.example.library.service.BookService;
+import com.example.library.service.BookStatsService;
 import com.example.library.specification.GenericSearchParameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,6 +32,7 @@ public class BookController {
     private final BookService bookService;
     private final BookMapper bookMapper;
     private final SpecificationMapper specificationMapper;
+    private final BookStatsService bookStatsService;
 
     @GetMapping(DEFAULT_URL)
     public ResponseEntity<?> findAll() {
@@ -71,6 +73,7 @@ public class BookController {
                                      @RequestParam("count") int count) {
         GenericSearchParameters parameters = specificationMapper.toSearchParameters(authors, genres, from, to, search, sort);
         Page<BookDto> books = bookService.findAll(page, count, parameters).map(bookMapper::toDto);
+        bookStatsService.increaseCounter();
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 

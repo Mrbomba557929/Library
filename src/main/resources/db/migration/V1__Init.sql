@@ -61,10 +61,10 @@ CREATE TABLE refresh_tokens
     user_id     INTEGER
 );
 
-CREATE TABLE stats
+CREATE TABLE book_search_stats
 (
     count BIGINT,
-    date TIMESTAMP DEFAULT now()
+    date TIMESTAMP DEFAULT now() UNIQUE
 );
 
 ALTER TABLE books

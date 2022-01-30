@@ -12,6 +12,11 @@ public class BookStatsServiceImpl implements BookStatsService {
     private final BookStatsRepository bookStatsRepository;
 
     @Override
+    public void increaseCounter() {
+        bookStatsRepository.increaseCounter();
+    }
+
+    @Override
     public long getNumberOfAddedBooksForToday() {
         return bookStatsRepository.getNumberOfAddedBooksForToday();
     }

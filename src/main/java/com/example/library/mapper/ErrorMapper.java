@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.List;
 
 @Component
 public class ErrorMapper {
@@ -12,7 +13,16 @@ public class ErrorMapper {
     public ErrorDto toDto(HttpStatus status, String message, String link) {
         return ErrorDto.builder()
                 .status(status)
-                .message(message)
+                .messages(List.of(message))
+                .link(link)
+                .timestamp(Instant.now())
+                .build();
+    }
+
+    public ErrorDto toDto(HttpStatus status, List<String> messages, String link) {
+        return ErrorDto.builder()
+                .status(status)
+                .messages(messages)
                 .link(link)
                 .timestamp(Instant.now())
                 .build();

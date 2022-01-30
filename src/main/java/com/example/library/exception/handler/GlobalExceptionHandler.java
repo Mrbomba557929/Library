@@ -26,15 +26,13 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(WebExchangeBindException.class)
-    public ResponseEntity<?> handleWebExchangeBindException(WebExchangeBindException exception) {
-        List<String> errors = exception.getBindingResult()
+    public ResponseEntity<?> handleWebExchangeBindException(WebExchangeBindException e) {
+        List<String> errors = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
 
-        return ResponseEntity
-                .badRequest()
-                .body(errors);
+        return new ResponseEntity<>(errorMapper.toDto(e.getStatus(), errors, null), e.getStatus());
     }
 }

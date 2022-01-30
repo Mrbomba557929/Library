@@ -3,6 +3,11 @@ package com.example.library.service;
 public interface BookStatsService {
 
     /**
+     * Method that increase counter the current date.
+     */
+    void increaseCounter();
+
+    /**
      * Method that gives the number of added books for today.
      *
      * @return the number of added books for today.

@@ -6,15 +6,16 @@ import lombok.Builder;
 import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
+import java.util.List;
 
-public record ErrorDto(HttpStatus status, String message, String link, Instant timestamp) {
+public record ErrorDto(HttpStatus status, List<String> messages, String link, Instant timestamp) {
 
     @Builder
     @JsonCreator
-    public ErrorDto(@JsonProperty("status") HttpStatus status, @JsonProperty("message") String message,
+    public ErrorDto(@JsonProperty("status") HttpStatus status, @JsonProperty("messages") List<String> messages,
                     @JsonProperty("link") String link, @JsonProperty("timestamp") Instant timestamp) {
         this.status = status;
-        this.message = message;
+        this.messages = messages;
         this.link = link;
         this.timestamp = timestamp;
     }
