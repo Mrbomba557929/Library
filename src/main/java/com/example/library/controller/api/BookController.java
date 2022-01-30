@@ -66,7 +66,7 @@ public class BookController {
                                      @RequestParam(name = "genres", required = false) String genres,
                                      @RequestParam(name = "from", required = false) Integer from,
                                      @RequestParam(name = "to", required = false) Integer to,
-                                     @RequestParam(name = "search", required = false, defaultValue = "") String search,
+                                     @RequestParam(name = "search", required = false) String search,
                                      @RequestParam("page") int page,
                                      @RequestParam("count") int count) {
         GenericSearchParameters parameters = specificationMapper.toSearchParameters(authors, genres, from, to, search, sort);

@@ -60,7 +60,12 @@ public class BookServiceImpl implements BookService {
             Sort.Direction direction = Sort.Direction.fromString(sortParameters[1]);
 
             if (sortParameters[0].equalsIgnoreCase("authors")) {
-                return bookRepository.findAllSortedByFirstElementFromAuthorsList(direction.name(), PageRequest.of(page, count));
+
+                if (direction == Sort.Direction.ASC) {
+                    return bookRepository.findAllSortedByFirstElementFromAuthorsListASC(PageRequest.of(page, count));
+                }
+
+                return bookRepository.findAllSortedByFirstElementFromAuthorsListDESC(PageRequest.of(page, count));
             }
 
             return bookRepository.findAll(specification, PageRequest.of(page, count, Sort.by(direction, sortParameters[0])));

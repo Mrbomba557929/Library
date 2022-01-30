@@ -13,8 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = """
             SELECT *
             FROM users
-            INNER JOIN users_authorities ua on users.id = ua.user_id
-            INNER JOIN authorities a on ua.authority_id = a.id
             WHERE users.email = ?1""", nativeQuery = true)
     Optional<User> findByEmail(String email);
 

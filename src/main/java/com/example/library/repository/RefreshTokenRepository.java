@@ -20,11 +20,15 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     Optional<RefreshToken> findByToken(String token);
 
     @Transactional
-    @Modifying
     @Query(value = """
-            INSERT INTO refresh_tokens (expiry_date, token, user_id)
+            WITH refresh_token AS
+            (
+                INSERT INTO refresh_tokens (expiry_date, token, user_id)
                 VALUES (?1, ?2, ?3)
-            RETURNING *""", nativeQuery = true)
+                RETURNING *
+            )
+            SELECT *
+            FROM refresh_token""", nativeQuery = true)
     RefreshToken save(Instant expiryDate, String token, Long userId);
 
     @Transactional

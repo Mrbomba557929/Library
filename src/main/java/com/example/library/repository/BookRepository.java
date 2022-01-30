@@ -30,12 +30,8 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             )
             SELECT *
             FROM books
-            INNER JOIN authors_books on authors_books.book_id = books.id
-            INNER JOIN authors on authors_books.author_id = authors.id
-            INNER JOIN genres ON genres.genre = books.genre
-            INNER JOIN urls ON urls.id = books.url_id
             INNER JOIN concate_fios ON concate_fios.id = books.id
-            ORDER BY concate_fios.all_fios_authors ?1, books.id
+            ORDER BY concate_fios.all_fios_authors, books.id ASC
             """,
             countQuery = """
             WITH concate_fios AS
@@ -48,11 +44,38 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             )
             SELECT COUNT(*)
             FROM books
-            INNER JOIN authors_books on authors_books.book_id = books.id
-            INNER JOIN authors on authors_books.author_id = authors.id
-            INNER JOIN genres ON genres.genre = books.genre
-            INNER JOIN urls ON urls.id = books.url_id
             INNER JOIN concate_fios ON concate_fios.id = books.id
+            GROUP BY books.name
             """, nativeQuery = true)
-    Page<Book> findAllSortedByFirstElementFromAuthorsList(String order, Pageable pageable);
+    Page<Book> findAllSortedByFirstElementFromAuthorsListASC(Pageable pageable);
+
+    @Query(value = """
+            WITH concate_fios AS
+            (
+            	SELECT books.id, string_agg(authors.fio, '') AS all_fios_authors
+            	FROM books
+            	INNER JOIN authors_books on authors_books.book_id = books.id
+            	INNER JOIN authors on authors_books.author_id = authors.id
+            	GROUP BY books.id
+            )
+            SELECT *
+            FROM books
+            INNER JOIN concate_fios ON concate_fios.id = books.id
+            ORDER BY concate_fios.all_fios_authors, books.id DESC
+            """,
+            countQuery = """
+            WITH concate_fios AS
+            (
+            	SELECT books.id, string_agg(authors.fio, '') AS all_fios_authors
+            	FROM books
+            	INNER JOIN authors_books on authors_books.book_id = books.id
+            	INNER JOIN authors on authors_books.author_id = authors.id
+            	GROUP BY books.id
+            )
+            SELECT COUNT(*)
+            FROM books
+            INNER JOIN concate_fios ON concate_fios.id = books.id
+            GROUP BY books.name
+            """, nativeQuery = true)
+    Page<Book> findAllSortedByFirstElementFromAuthorsListDESC(Pageable pageable);
 }
