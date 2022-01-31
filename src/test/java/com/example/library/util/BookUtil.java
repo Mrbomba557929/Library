@@ -5,7 +5,6 @@ import com.example.library.exception.business.SortingException;
 import com.example.library.exception.factory.ErrorFactory;
 import com.google.common.base.Strings;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.Comparator;
@@ -14,7 +13,6 @@ import java.util.List;
 import static com.example.library.exception.factory.ErrorMessage.SORTING_EXCEPTION;
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
-@Component
 public class BookUtil implements Comparator<String> {
 
     @Override

@@ -1,12 +1,12 @@
 CREATE TABLE genres
 (
-    genre TEXT PRIMARY KEY
+    genre VARCHAR(100) PRIMARY KEY
 );
 
 CREATE TABLE authors
 (
     id  SERIAL PRIMARY KEY,
-    fio TEXT UNIQUE
+    fio VARCHAR(355) UNIQUE
 );
 
 CREATE TABLE authors_books
@@ -19,9 +19,9 @@ CREATE TABLE authors_books
 CREATE TABLE books
 (
     id          SERIAL PRIMARY KEY,
-    name        TEXT,
+    name        VARCHAR(300),
     creation_at TIMESTAMP,
-    genre       TEXT,
+    genre       VARCHAR(100),
     added_at    TIMESTAMP DEFAULT now(),
     user_id     INTEGER,
     url_id      INTEGER
@@ -30,7 +30,7 @@ CREATE TABLE books
 CREATE TABLE urls
 (
     id  SERIAL PRIMARY KEY,
-    url TEXT
+    url VARCHAR(500)
 );
 
 CREATE TABLE users_authorities
@@ -49,14 +49,14 @@ CREATE TABLE authorities
 CREATE TABLE users
 (
     id       SERIAL PRIMARY KEY,
-    email    TEXT UNIQUE,
-    password TEXT
+    email    VARCHAR(200) UNIQUE,
+    password VARCHAR(200)
 );
 
 CREATE TABLE refresh_tokens
 (
     id          SERIAL PRIMARY KEY,
-    token       TEXT UNIQUE,
+    token       VARCHAR(200) UNIQUE,
     expiry_date TIMESTAMP,
     user_id     INTEGER
 );
@@ -91,42 +91,3 @@ ALTER TABLE books
 ALTER TABLE books
     ADD FOREIGN KEY (url_id) REFERENCES urls (id)
         ON DELETE CASCADE;
-
-INSERT INTO authors (fio)
-VALUES
-    ('Вася Пупкин'),
-    ('Дима Дудкин'),
-    ('Артём Муткин'),
-    ('Алексей Бакукин');
-
-INSERT INTO urls (url)
-VALUES
-    ('https://vk.com/im?peers=313873506_c19_c21'),
-    ('https://vk.com/im?peers=534534543'),
-    ('https://vk.com/im?peers=31387350867867876876');
-
-INSERT INTO genres (genre)
-VALUES
-    ('Роман'),
-    ('Путешествие'),
-    ('Детектив'),
-    ('Баракутин');
-
-INSERT INTO books (name, creation_at, genre, added_at, url_id)
-VALUES
-    ('Пупка', '04-04-2004', 'Роман', '04-04-2004', 1),
-    ('Дудка', '04-04-2004', 'Детектив', '04-04-2004', 2),
-    ('Мутка', '04-04-2004', 'Путешествие', '04-04-2004', 3),
-    ('Путка', '04-04-2004', 'Баракутин', '04-04-2004', 2);
-
-INSERT INTO authors_books (author_id, book_id)
-VALUES
-    (1, 1),
-       (1, 2),
-       (1, 3),
-       (2, 2),
-       (2, 3),
-       (2, 4),
-       (3, 1),
-       (3, 3),
-       (4, 4);

@@ -4,13 +4,12 @@ import com.example.library.domain.dto.base.BookCreationDate;
 import com.example.library.domain.model.Book;
 import com.example.library.factory.BookFactory;
 import com.example.library.util.BookUtil;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 
@@ -20,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
-@RequiredArgsConstructor
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
 class BookRepositoryTest {
@@ -28,6 +26,13 @@ class BookRepositoryTest {
     private final BookRepository bookRepository;
     private final BookFactory bookFactory;
     private final BookUtil bookUtil;
+
+    @Autowired
+    public BookRepositoryTest(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+        this.bookFactory = new BookFactory();
+        this.bookUtil = new BookUtil();
+    }
 
     @AfterEach
     void tearDown() {
@@ -69,7 +74,7 @@ class BookRepositoryTest {
 
         //when
         List<Book> expected = bookRepository
-                .findAllSortedByFirstElementFromAuthorsListASC(Mockito.any(PageRequest.class))
+                .findAllSortedByFirstElementFromAuthorsListASC(PageRequest.ofSize(5))
                 .getContent();
 
         //then
@@ -91,7 +96,7 @@ class BookRepositoryTest {
 
         //when
         List<Book> expected = bookRepository
-                .findAllSortedByFirstElementFromAuthorsListDESC(Mockito.any(PageRequest.class))
+                .findAllSortedByFirstElementFromAuthorsListDESC(PageRequest.ofSize(5))
                 .getContent();
 
         //then

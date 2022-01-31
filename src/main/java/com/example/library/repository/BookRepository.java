@@ -31,7 +31,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             SELECT *
             FROM books
             INNER JOIN concate_fios ON concate_fios.id = books.id
-            ORDER BY concate_fios.all_fios_authors, books.id ASC
+            ORDER BY concate_fios.all_fios_authors ASC, books.id
             """,
             countQuery = """
             WITH concate_fios AS
@@ -60,7 +60,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             SELECT *
             FROM books
             INNER JOIN concate_fios ON concate_fios.id = books.id
-            ORDER BY concate_fios.all_fios_authors, books.id DESC
+            ORDER BY concate_fios.all_fios_authors DESC, books.id
             """,
             countQuery = """
             WITH concate_fios AS

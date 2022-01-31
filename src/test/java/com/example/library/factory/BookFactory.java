@@ -10,7 +10,6 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Stream;
 
-@Component
 public class BookFactory {
 
     private final Random random;
