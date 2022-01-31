@@ -1,8 +1,6 @@
 package com.example.library.factory;
 
-import com.example.library.domain.model.Author;
 import com.example.library.domain.model.Book;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,9 +11,11 @@ import java.util.stream.Stream;
 public class BookFactory {
 
     private final Random random;
+    private final AuthorFactory authorFactory;
 
     public BookFactory() {
         random = new Random();
+        authorFactory = new AuthorFactory();
     }
 
     public List<Book> giveAGivenNumberOfBooks(int numberOfBooks) {
@@ -23,7 +23,7 @@ public class BookFactory {
                 () -> Book.builder()
                         .addedAt(getRandomDate())
                         .creationAt(getRandomDate())
-                        .id(random.nextLong())
+                        .id(random.nextLong(0, 100000))
                         .name(UUID.randomUUID().toString())
                         .build()
                 )
@@ -38,14 +38,7 @@ public class BookFactory {
                         .creationAt(getRandomDate())
                         .id(random.nextLong())
                         .name(UUID.randomUUID().toString())
-                        .authors(
-                                Stream.generate(() -> Author.builder()
-                                                .id(random.nextLong())
-                                                .fio(UUID.randomUUID().toString())
-                                                .build())
-                                        .limit(numberOfAuthorsInEachBook)
-                                        .toList()
-                        )
+                        .authors(authorFactory.giveAGivenNumberOfAuthors(numberOfAuthorsInEachBook))
                         .build()
                 )
                 .limit(numberOfBooks)
@@ -54,7 +47,7 @@ public class BookFactory {
 
     private LocalDate getRandomDate() {
         return LocalDateTime.ofInstant(
-                new Date(Math.abs(System.currentTimeMillis() - random.nextLong())).toInstant(),
+                new Date(Math.abs(System.currentTimeMillis() - random.nextLong(0, 100000))).toInstant(),
                 ZoneOffset.UTC
         ).toLocalDate();
     }

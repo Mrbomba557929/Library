@@ -1,5 +1,11 @@
 package com.example.library.repository;
 
+import com.example.library.domain.model.Author;
+import com.example.library.factory.AuthorFactory;
+import com.example.library.factory.BookFactory;
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import org.flywaydb.test.annotation.FlywayTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,26 +13,64 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES;
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.RefreshMode.AFTER_EACH_TEST_METHOD;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 @DataJpaTest
+@FlywayTest
+@AutoConfigureEmbeddedDatabase(refresh = AFTER_EACH_TEST_METHOD, type = POSTGRES, provider = ZONKY)
 @ExtendWith(MockitoExtension.class)
 class AuthorRepositoryTest {
 
     private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
+    private final AuthorFactory authorFactory;
+    private final BookFactory bookFactory;
 
     @Autowired
-    public AuthorRepositoryTest(AuthorRepository authorRepository) {
+    public AuthorRepositoryTest(AuthorRepository authorRepository, BookRepository bookRepository) {
         this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
+        this.bookFactory = new BookFactory();
+        this.authorFactory = new AuthorFactory();
     }
 
-    @DisplayName("Test should add a book to an author")
-    @Test
-    void shouldAddABookToAnAuthor() {
-
+    @AfterEach
+    void tearDown() {
+        bookRepository.deleteAll();
+        authorRepository.deleteAll();
     }
 
-    @DisplayName("Test should save an author")
+    @DisplayName("Test should save an author without conflicts (there is no author in the database)")
     @Test
-    void shouldSaveAnAuthor() {
+    void shouldSaveAnAuthorWithoutConflicts() {
 
+        //given
+        Author author = authorFactory.giveAGivenNumberOfAuthors(1).get(0);
+
+        //when
+        Author expected = authorRepository.save(author.getFio());
+
+        //then
+        assertThat(expected).isNotNull();
+        assertThat(expected.getFio()).isEqualTo(author.getFio());
+    }
+
+    @DisplayName("Test should save an author with conflicts (there is author in the database)")
+    @Test
+    void shouldSaveAnAuthorWithConflicts() {
+
+        //given
+        Author author = authorFactory.giveAGivenNumberOfAuthors(1).get(0);
+        authorRepository.save(author);
+
+        //when
+        Author expected = authorRepository.save(author.getFio());
+
+        //then
+        assertThat(expected).isNotNull();
+        assertThat(expected.getFio()).isEqualTo(author.getFio());
     }
 }

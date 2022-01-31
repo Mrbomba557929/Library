@@ -24,12 +24,4 @@ public interface AuthorService {
      * @return list of the {@link Author} entities.
      */
     List<Author> saveAll(List<Author> authors);
-
-    /**
-     * Method to add the {@link Book} to the {@link Author} entities.
-     *
-     * @param idBook - the id of the {@link Book} entity.
-     * @param authors - the list of the {@link Author} entities.
-     */
-    void addBookToAuthors(Long idBook, List<Author> authors);
 }

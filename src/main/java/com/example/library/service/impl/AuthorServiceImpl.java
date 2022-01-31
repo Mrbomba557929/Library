@@ -43,9 +43,4 @@ public class AuthorServiceImpl implements AuthorService {
                 })
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public void addBookToAuthors(Long bookId, List<Author> authors) {
-        authors.forEach(author -> authorRepository.addBook(bookId, author.getId()));
-    }
 }
