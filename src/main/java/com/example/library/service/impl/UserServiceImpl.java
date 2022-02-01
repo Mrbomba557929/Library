@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.example.library.domain.еnum.Role.ROLE_USER;
 import static com.example.library.exception.factory.ErrorMessage.NOT_FOUND_USER_EXCEPTION;
 import static org.springframework.http.HttpStatus.*;
 
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addAuthorityAndReturnUser(Long userId, Long authorityId) {
         try {
+            User test = userRepository.findById(1L).get();
             return userRepository.addAuthorityAndReturnUser(userId, authorityId)
                     .orElseThrow(() ->
                             ErrorFactory.exceptionBuilder(NOT_FOUND_USER_EXCEPTION)
@@ -64,8 +66,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registration(User user, PasswordEncoder passwordEncoder) {
         try {
-            User savedUser = userRepository.save(user.getEmail(), passwordEncoder.encode(user.getPassword()));
-            return addAuthorityAndReturnUser(savedUser.getId(), authorityService.findByRole(Role.ROLE_USER).getId());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return addAuthorityAndReturnUser(userRepository.save(user).getId(), authorityService.findByRole(ROLE_USER).getId());
         } catch (DataAccessException e) {
             throw ErrorFactory.exceptionBuilder(e.getMessage())
                     .status(EXPECTATION_FAILED)

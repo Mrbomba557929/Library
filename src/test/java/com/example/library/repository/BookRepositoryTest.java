@@ -41,11 +41,6 @@ class BookRepositoryTest {
         this.bookUtil = new BookUtil();
     }
 
-    @AfterEach
-    void tearDown() {
-        bookRepository.deleteAll();
-    }
-
     @DisplayName("Test should give all a creation dates of an all books.")
     @Test
     void shouldGiveAllCreationDatesOfAllBooks() {

@@ -2,10 +2,8 @@ package com.example.library.repository;
 
 import com.example.library.domain.model.Author;
 import com.example.library.factory.AuthorFactory;
-import com.example.library.factory.BookFactory;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.flywaydb.test.annotation.FlywayTest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,22 +23,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class AuthorRepositoryTest {
 
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
     private final AuthorFactory authorFactory;
-    private final BookFactory bookFactory;
 
     @Autowired
-    public AuthorRepositoryTest(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public AuthorRepositoryTest(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
-        this.bookRepository = bookRepository;
-        this.bookFactory = new BookFactory();
         this.authorFactory = new AuthorFactory();
-    }
-
-    @AfterEach
-    void tearDown() {
-        bookRepository.deleteAll();
-        authorRepository.deleteAll();
     }
 
     @DisplayName("Test should save an author without conflicts (there is no author in the database)")

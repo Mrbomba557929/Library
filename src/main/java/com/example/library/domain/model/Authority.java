@@ -1,8 +1,7 @@
 package com.example.library.domain.model;
 
 import com.example.library.domain.еnum.Role;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,6 +10,9 @@ import java.util.Objects;
 
 @Setter
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "authorities")
 public class Authority implements GrantedAuthority {

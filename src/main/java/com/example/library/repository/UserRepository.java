@@ -17,27 +17,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     @Query(value = """
-            WITH e AS (
+            WITH users_authorities AS (
                 INSERT INTO users_authorities (user_id, authority_id)
                 VALUES (?1, ?2)
                 RETURNING user_id, authority_id
             )
-            SELECT *
-            FROM e
-            INNER JOIN users ON e.user_id = users.id;
-                        """, nativeQuery = true)
+            SELECT u.id, u.email, u.password,
+                   a.id, a.role
+            FROM users_authorities AS u_a
+            LEFT OUTER JOIN users u ON u.id = u_a.user_id
+            LEFT OUTER JOIN authorities a on a.id = u_a.authority_id""", nativeQuery = true)
     Optional<User> addAuthorityAndReturnUser(Long userId, Long authorityId);
-
-    @Query(value = """
-            WITH e AS (
-                 INSERT INTO users (email, password)
-                     VALUES (?1, ?2)
-                 RETURNING id, email, password
-            )
-            SELECT *
-            FROM e
-            """, nativeQuery = true)
-    User save(String email, String password);
+    // доделать, хибернейт нихуя не асорити не достает, ему по хуй на него, хотя sql запрос работает.
+    // Видимо хибер долабеб и придется писать отдельные запросы.
 
     @Query(value = """
             SELECT
