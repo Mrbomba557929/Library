@@ -4,13 +4,11 @@ import com.example.library.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Transactional
-@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = """
@@ -19,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             WHERE users.email = ?1""", nativeQuery = true)
     Optional<User> findByEmail(String email);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(value = """
                 INSERT INTO users_authorities (user_id, authority_id)
                 VALUES (?1, ?2)""", nativeQuery = true)

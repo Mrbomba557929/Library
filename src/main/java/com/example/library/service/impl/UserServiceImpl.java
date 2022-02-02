@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.library.domain.еnum.Role.ROLE_USER;
 import static com.example.library.exception.factory.ErrorMessage.NOT_FOUND_USER_EXCEPTION;

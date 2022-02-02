@@ -61,7 +61,6 @@ public class AuthController {
 
     @PostMapping(UPDATE_ACCESS_TOKEN)
     public ResponseEntity<?> updateAccessToken(@RequestBody @Valid RefreshTokenDto.TokenRefreshRequestDto refreshTokenRequest) {
-
         RefreshToken refreshToken = refreshTokenService.verifyExpiration(refreshTokenRequest.refreshToken());
         UserDto userDto = userMapper.toDto(refreshToken.getUser());
         String token = jwtUtils.generateJwtToken(userDto.email());
