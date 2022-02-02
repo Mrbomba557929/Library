@@ -49,15 +49,16 @@ class UserRepositoryTest {
         assertThat(foundUser.getEmail()).isEqualTo(user.getEmail());
     }
 
-    @DisplayName("Test should properly add the authority and return the user")
+    @DisplayName("Test should properly add the authority")
     @Test
-    void shouldProperlyAddAuthorityAndReturnUser() {
+    void shouldProperlyAddAuthority() {
         //given
         User user = userRepository.save(userFactory.giveAGivenNumberOfUsers(1).get(0));
         Authority authority = authorityRepository.save(Authority.builder().role(Role.ROLE_USER).build());
 
         //when
-        User returnedUser = userRepository.addAuthorityAndReturnUser(user.getId(), authority.getId()).orElse(null);
+        userRepository.addAuthority(user.getId(), authority.getId());
+        User returnedUser = userRepository.findById(user.getId()).orElse(null);
 
         //then
         assertThat(returnedUser).isNotNull();

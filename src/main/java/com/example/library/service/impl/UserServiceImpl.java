@@ -1,7 +1,6 @@
 package com.example.library.service.impl;
 
 import com.example.library.domain.model.User;
-import com.example.library.domain.еnum.Role;
 import com.example.library.exception.business.FailedToSaveException;
 import com.example.library.exception.business.NotFound;
 import com.example.library.exception.factory.ErrorFactory;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.library.domain.еnum.Role.ROLE_USER;
 import static com.example.library.exception.factory.ErrorMessage.NOT_FOUND_USER_EXCEPTION;
@@ -47,8 +47,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addAuthorityAndReturnUser(Long userId, Long authorityId) {
         try {
-            User test = userRepository.findById(1L).get();
-            return userRepository.addAuthorityAndReturnUser(userId, authorityId)
+            userRepository.addAuthority(userId, authorityId);
+            return userRepository.findById(userId)
                     .orElseThrow(() ->
                             ErrorFactory.exceptionBuilder(NOT_FOUND_USER_EXCEPTION)
                                     .status(NOT_FOUND)

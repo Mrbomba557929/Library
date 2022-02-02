@@ -2,11 +2,14 @@ package com.example.library.repository;
 
 import com.example.library.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Transactional
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -16,20 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
             WHERE users.email = ?1""", nativeQuery = true)
     Optional<User> findByEmail(String email);
 
+    @Modifying
     @Query(value = """
-            WITH users_authorities AS (
                 INSERT INTO users_authorities (user_id, authority_id)
-                VALUES (?1, ?2)
-                RETURNING user_id, authority_id
-            )
-            SELECT u.id, u.email, u.password,
-                   a.id, a.role
-            FROM users_authorities AS u_a
-            LEFT OUTER JOIN users u ON u.id = u_a.user_id
-            LEFT OUTER JOIN authorities a on a.id = u_a.authority_id""", nativeQuery = true)
-    Optional<User> addAuthorityAndReturnUser(Long userId, Long authorityId);
-    // доделать, хибернейт нихуя не асорити не достает, ему по хуй на него, хотя sql запрос работает.
-    // Видимо хибер долабеб и придется писать отдельные запросы.
+                VALUES (?1, ?2)""", nativeQuery = true)
+    void addAuthority(Long userId, Long authorityId);
 
     @Query(value = """
             SELECT
