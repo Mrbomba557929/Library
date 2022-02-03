@@ -64,7 +64,7 @@ CREATE TABLE refresh_tokens
 CREATE TABLE book_search_stats
 (
     count BIGINT,
-    date TIMESTAMP DEFAULT now() UNIQUE
+    date DATE DEFAULT now() UNIQUE
 );
 
 ALTER TABLE books
