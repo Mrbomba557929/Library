@@ -2,12 +2,14 @@ package com.example.library.controller.api;
 
 import com.example.library.domain.dto.base.RefreshTokenDto;
 import com.example.library.domain.dto.base.UserDto;
+import com.example.library.domain.model.Genre;
 import com.example.library.domain.model.RefreshToken;
 import com.example.library.domain.model.User;
 import com.example.library.mapper.UserMapper;
 import com.example.library.exception.business.AuthenticationException;
 import com.example.library.exception.factory.ErrorFactory;
 import com.example.library.security.jwt.JwtUtils;
+import com.example.library.service.GenreService;
 import com.example.library.service.RefreshTokenService;
 import com.example.library.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +40,11 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+    private final GenreService genreService;
 
     @PostMapping(REGISTRATION)
     public ResponseEntity<?> registration(@RequestBody @Valid UserDto.UserRegistrationRequestDto request) {
+        Genre genre = genreService.save(Genre.builder().genre("3434").build());
         User savedUser = userService.registration(userMapper.toEntity(request), passwordEncoder);
         return new ResponseEntity<>(userMapper.toDto(savedUser), HttpStatus.CREATED);
     }

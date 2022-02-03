@@ -16,8 +16,7 @@ public interface BookStatsRepository extends JpaRepository<Book, Long> {
               INSERT INTO book_search_stats (count, date)
               VALUES (1, now())
               ON CONFLICT (date)
-              DO
-                  UPDATE SET count = count + 1
+              DO UPDATE SET count = count + 1
             """, nativeQuery = true)
     void increaseCounter();
 

@@ -9,11 +9,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface UrlRepository extends JpaRepository<Url, Long> {
 
-    //TODO: исправить здесь ошибку!!
     @Transactional
     @Query(value = """
-            INSERT INTO urls
-            VALUES (?1)
+            WITH e AS (
+                INSERT INTO urls (url)
+                VALUES (?1)
+                RETURNING id, url
+            )
+                SELECT *
+                FROM e
+            UNION
+                SELECT *
+                FROM urls;
             """, nativeQuery = true)
     Url save(String url);
 }

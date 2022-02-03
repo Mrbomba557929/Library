@@ -32,7 +32,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     RefreshToken save(Instant expiryDate, String token, Long userId);
 
     @Transactional
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(value = """
             DELETE FROM refresh_tokens
             WHERE refresh_tokens.user_id = ?1""", nativeQuery = true)
