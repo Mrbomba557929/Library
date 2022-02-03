@@ -29,12 +29,10 @@ class BookStatsRepositoryTest extends AbstractRepositoryTest {
         assertThat(countOfRecords).isEqualTo(1);
     }
 
+    @Sql(scripts = "/sql/book_stats_test_5.sql")
     @DisplayName("Test should properly increase counter")
     @Test
     void shouldProperlyIncreaseCounter() {
-        //given
-        bookStatsRepository.increaseCounter(); // it will add an entry to the table. Counter = 1
-
         //when
         bookStatsRepository.increaseCounter(); // it will increase already added counter for today
         long count = bookStatsRepository.getCountByDate(Instant.now());
@@ -45,12 +43,10 @@ class BookStatsRepositoryTest extends AbstractRepositoryTest {
         assertThat(count).isEqualTo(2);
     }
 
+    @Sql(scripts = "/sql/book_stats_test_5.sql")
     @DisplayName("Test should properly return number of added books for today")
     @Test
     void shouldProperlyReturnNumberOfAddedBooksForToday() {
-        //given
-        bookStatsRepository.increaseCounter(); // it will add an entry to the table. Counter = 1
-
         //when
         bookStatsRepository.increaseCounter();
         bookStatsRepository.increaseCounter();
@@ -71,31 +67,49 @@ class BookStatsRepositoryTest extends AbstractRepositoryTest {
         long countForWeek = bookStatsRepository.getNumberOfAddedBooksForWeek();
 
         //then
-        assertThat(countForWeek).isEqualTo(21);
+        assertThat(countForWeek).isEqualTo(26);
     }
 
+    @Sql(scripts = "/sql/book_stats_test_6.sql")
+    @DisplayName("Test should properly return number of added books for month")
     @Test
-    void getNumberOfAddedBooksForMonth() {
+    void shouldProperlyReturnNumberOfAddedBooksForMonth() {
+        //when
+        long countForMonth = bookStatsRepository.getNumberOfAddedBooksForMonth();
+
+        //then
+        assertThat(countForMonth).isEqualTo(26);
     }
 
+    @Sql(scripts = "/sql/book_stats_test_6.sql")
+    @DisplayName("Test should properly return number of added books for year")
     @Test
-    void getNumberOfAddedBooksForYear() {
+    void shouldProperlyReturnNumberOfAddedBooksForYear() {
+        //when
+        long countForYear = bookStatsRepository.getNumberOfAddedBooksForYear();
+
+        //then
+        assertThat(countForYear).isEqualTo(26);
     }
 
     @Test
     void getNumberOfSearchesBooksForToday() {
+
     }
 
     @Test
     void getNumberOfSearchesBooksForMonth() {
+
     }
 
     @Test
     void getNumberOfSearchesBooksForYear() {
+
     }
 
     @Test
     void getNumberOfSearchesBooksForAllTime() {
+
     }
 
     @Test
