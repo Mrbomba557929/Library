@@ -1,26 +1,32 @@
 package com.example.library.repository;
 
+import com.example.library.domain.model.Book;
+import com.example.library.factory.BookFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class BookStatsRepositoryTest extends AbstractRepositoryTest {
 
     private final BookStatsRepository bookStatsRepository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public BookStatsRepositoryTest(BookStatsRepository bookStatsRepository) {
+    public BookStatsRepositoryTest(BookStatsRepository bookStatsRepository, BookRepository bookRepository) {
         this.bookStatsRepository = bookStatsRepository;
+        this.bookRepository = bookRepository;
     }
 
     @DisplayName("Test should properly add an entry to the table for today's date")
     @Test
-    void shouldProperlyAddAnEntryToTheTableForTodayDate() {
+    void itShouldProperlyAddAnEntryToTheTableForTodayDate() {
         //when
         bookStatsRepository.increaseCounter();
         long countOfRecords = bookStatsRepository.count();
@@ -29,7 +35,7 @@ class BookStatsRepositoryTest extends AbstractRepositoryTest {
         assertThat(countOfRecords).isEqualTo(1);
     }
 
-    @Sql(scripts = "/sql/book_stats_test_5.sql")
+    @Sql(scripts = "/sql/book_stats_test.sql")
     @DisplayName("Test should properly increase counter")
     @Test
     void shouldProperlyIncreaseCounter() {
@@ -39,81 +45,128 @@ class BookStatsRepositoryTest extends AbstractRepositoryTest {
         long countOfRecords = bookStatsRepository.count();
 
         //then
-        assertThat(countOfRecords).isEqualTo(1);
-        assertThat(count).isEqualTo(2);
+        assertThat(countOfRecords).isEqualTo(5);
+        assertThat(count).isEqualTo(6);
     }
 
-    @Sql(scripts = "/sql/book_stats_test_5.sql")
     @DisplayName("Test should properly return number of added books for today")
     @Test
     void shouldProperlyReturnNumberOfAddedBooksForToday() {
-        //when
-        bookStatsRepository.increaseCounter();
-        bookStatsRepository.increaseCounter();
+        //given
+        List<Book> books = BookFactory.generator(15)
+                .addedDate(LocalDate.now())
+                .generate();
+        bookRepository.saveAll(books);
 
-        long count = bookStatsRepository.getCountByDate(Instant.now());
-        long countOfRecords = bookStatsRepository.countOfRecord();
+        //when
+        long count = bookStatsRepository.getNumberOfAddedBooksForToday();
 
         //then
-        assertThat(countOfRecords).isEqualTo(1);
-        assertThat(count).isEqualTo(3);
+        assertThat(count).isEqualTo(15);
     }
 
-    @Sql(scripts = "/sql/book_stats_test_6.sql")
     @DisplayName("Test should properly return number of added books for week")
     @Test
     void shouldProperlyReturnNumberOfAddedBooksForWeek() {
+        //given
+        List<Book> books = BookFactory.generator(12)
+                .addedDate(LocalDate.now())
+                .generate();
+        bookRepository.saveAll(books);
+
         //when
         long countForWeek = bookStatsRepository.getNumberOfAddedBooksForWeek();
 
         //then
-        assertThat(countForWeek).isEqualTo(26);
+        assertThat(countForWeek).isEqualTo(12);
     }
 
-    @Sql(scripts = "/sql/book_stats_test_6.sql")
     @DisplayName("Test should properly return number of added books for month")
     @Test
     void shouldProperlyReturnNumberOfAddedBooksForMonth() {
+        //given
+        List<Book> books = BookFactory.generator(22)
+                .addedDate(LocalDate.now())
+                .generate();
+        bookRepository.saveAll(books);
+
         //when
         long countForMonth = bookStatsRepository.getNumberOfAddedBooksForMonth();
 
         //then
-        assertThat(countForMonth).isEqualTo(26);
+        assertThat(countForMonth).isEqualTo(22);
     }
 
-    @Sql(scripts = "/sql/book_stats_test_6.sql")
     @DisplayName("Test should properly return number of added books for year")
     @Test
     void shouldProperlyReturnNumberOfAddedBooksForYear() {
+        //given
+        List<Book> books = BookFactory.generator(32)
+                .addedDate(LocalDate.now())
+                .generate();
+        bookRepository.saveAll(books);
+
         //when
         long countForYear = bookStatsRepository.getNumberOfAddedBooksForYear();
 
         //then
-        assertThat(countForYear).isEqualTo(26);
+        assertThat(countForYear).isEqualTo(32);
     }
 
+    @Sql(scripts = "/sql/book_stats_test.sql")
+    @DisplayName("Test should return number of searches the books for today")
     @Test
-    void getNumberOfSearchesBooksForToday() {
+    void itShouldProperlyReturnNumberOfSearchesBooksForToday() {
+        //when
+        long numberOfSearchesBooks = bookStatsRepository.getNumberOfSearchesBooksForToday();
 
+        //then
+        assertThat(numberOfSearchesBooks).isEqualTo(5);
     }
 
+    @Sql(scripts = "/sql/book_stats_test.sql")
+    @DisplayName("Test should return number of searches the books for month")
     @Test
-    void getNumberOfSearchesBooksForMonth() {
+    void isShouldProperlyReturnNumberOfSearchesBooksForMonth() {
+        //when
+        long numberOfSearchesBooks = bookStatsRepository.getNumberOfSearchesBooksForMonth();
 
+        //then
+        assertThat(numberOfSearchesBooks).isEqualTo(86);
     }
 
+    @Sql(scripts = "/sql/book_stats_test.sql")
+    @DisplayName("Test should return number of searches the books for year")
     @Test
-    void getNumberOfSearchesBooksForYear() {
+    void isShouldProperlyReturnNumberOfSearchesBooksForYear() {
+        //when
+        long numberOfSearchesBooks = bookStatsRepository.getNumberOfSearchesBooksForYear();
 
+        //then
+        assertThat(numberOfSearchesBooks).isEqualTo(86);
     }
 
+    @Sql(scripts = "/sql/book_stats_test.sql")
+    @DisplayName("Test should return number of searches the books for all time")
     @Test
     void getNumberOfSearchesBooksForAllTime() {
+        //when
+        long numberOfSearchesBooks = bookStatsRepository.getNumberOfSearchesBooksForAllTime();
 
+        //then
+        assertThat(numberOfSearchesBooks).isEqualTo(86);
     }
 
     @Test
-    void getCountAllBooks() {
+    void itShouldReturnCountAllBooks() {
+        //given
+        List<Book> books = BookFactory.generator(10).generate();
+        bookRepository.saveAll(books);
 
+        //when
+        long countAllBooks = bookStatsRepository.getCountAllBooks();
+
+        //then
+        assertThat(countAllBooks).isEqualTo(books.size());
     }
 }

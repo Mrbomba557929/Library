@@ -2,6 +2,7 @@ package com.example.library.repository;
 
 import com.example.library.domain.model.RefreshToken;
 import com.example.library.factory.RefreshTokenFactory;
+import com.example.library.factory.UserFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +13,20 @@ class RefreshTokenRepositoryTest extends AbstractRepositoryTest {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final RefreshTokenFactory refreshTokenFactory;
 
     @Autowired
     public RefreshTokenRepositoryTest(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
-        this.refreshTokenFactory = new RefreshTokenFactory();
     }
 
     @DisplayName("Test should properly find the refresh token by the token")
     @Test
     void shouldProperlyFindRefreshTokenByToken() {
         //given
-        RefreshToken refreshToken = refreshTokenFactory.giveAGivenNumberOfRefreshTokens(1).get(0);
+        RefreshToken refreshToken = RefreshTokenFactory.generator(1)
+                .generate()
+                .get(0);
         refreshTokenRepository.save(refreshToken);
 
         //when
@@ -40,7 +41,9 @@ class RefreshTokenRepositoryTest extends AbstractRepositoryTest {
     @Test
     void shouldProperlySave() {
         //given
-        RefreshToken refreshToken = refreshTokenFactory.giveAGivenNumberOfRefreshTokensWithUser(1).get(0);
+        RefreshToken refreshToken = RefreshTokenFactory.generator(1)
+                .generateWithUsers(UserFactory.generator(1))
+                .get(0);
         refreshToken.setUser(userRepository.save(refreshToken.getUser()));
 
         //when
@@ -61,7 +64,9 @@ class RefreshTokenRepositoryTest extends AbstractRepositoryTest {
     @Test
     void shouldProperlyDeleteRefreshTokenByUserId() {
         //given
-        RefreshToken refreshToken = refreshTokenFactory.giveAGivenNumberOfRefreshTokensWithUser(1).get(0);
+        RefreshToken refreshToken = RefreshTokenFactory.generator(1)
+                .generateWithUsers(UserFactory.generator(1))
+                .get(0);
         refreshToken.setUser(userRepository.save(refreshToken.getUser()));
         refreshTokenRepository.save(refreshToken);
 

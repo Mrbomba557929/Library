@@ -11,12 +11,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class AuthorRepositoryTest extends AbstractRepositoryTest {
 
     private final AuthorRepository authorRepository;
-    private final AuthorFactory authorFactory;
 
     @Autowired
     public AuthorRepositoryTest(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
-        this.authorFactory = new AuthorFactory();
     }
 
     @DisplayName("Test should save an author without conflicts (there is no author in the database)")
@@ -24,7 +22,7 @@ class AuthorRepositoryTest extends AbstractRepositoryTest {
     void shouldSaveAnAuthorWithoutConflicts() {
 
         //given
-        Author author = authorFactory.giveAGivenNumberOfAuthors(1).get(0);
+        Author author = AuthorFactory.generator(1).generate().get(0);
 
         //when
         Author expected = authorRepository.save(author.getFio());
@@ -39,7 +37,7 @@ class AuthorRepositoryTest extends AbstractRepositoryTest {
     void shouldSaveAnAuthorWithConflicts() {
 
         //given
-        Author author = authorFactory.giveAGivenNumberOfAuthors(1).get(0);
+        Author author = AuthorFactory.generator(1).generate().get(0);
         authorRepository.save(author);
 
         //when

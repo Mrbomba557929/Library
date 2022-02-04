@@ -11,19 +11,20 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class GenreRepositoryTest extends AbstractRepositoryTest {
 
     private final GenreRepository genreRepository;
-    private final GenreFactory genreFactory;
 
     @Autowired
     public GenreRepositoryTest(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
-        this.genreFactory = new GenreFactory();
     }
 
     @DisplayName(value = "Test should properly save the entity without conflicts")
     @Test
     void shouldProperlySaveWithoutConflicts() {
         //given
-        Genre genre = genreFactory.createGenreWithCertainGenre("testGenre");
+        Genre genre = GenreFactory.generator(1)
+                .genre("testGenre")
+                .generate()
+                .get(0);
 
         //when
         Genre genreFromDb = genreRepository.save(genre.getGenre());
@@ -37,7 +38,10 @@ class GenreRepositoryTest extends AbstractRepositoryTest {
     @Test
     void shouldNotSaveButReturnTheExistingOne() {
         //given
-        Genre genre = genreFactory.createGenreWithCertainGenre("testGenre");
+        Genre genre = GenreFactory.generator(1)
+                .genre("testGenre")
+                .generate()
+                .get(0);
 
         //when
         Genre genreFromDb = genreRepository.save(genre.getGenre());

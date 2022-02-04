@@ -2,6 +2,7 @@ package com.example.library.repository;
 
 import com.example.library.domain.dto.base.BookCreationDate;
 import com.example.library.domain.model.Book;
+import com.example.library.factory.AuthorFactory;
 import com.example.library.factory.BookFactory;
 import com.example.library.util.BookUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -18,13 +19,11 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 class BookRepositoryTest extends AbstractRepositoryTest{
 
     private final BookRepository bookRepository;
-    private final BookFactory bookFactory;
     private final BookUtil bookUtil;
 
     @Autowired
     public BookRepositoryTest(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.bookFactory = new BookFactory();
         this.bookUtil = new BookUtil();
     }
 
@@ -32,7 +31,7 @@ class BookRepositoryTest extends AbstractRepositoryTest{
     @Test
     void shouldGiveAllCreationDatesOfAllBooks() {
         //given
-        List<Book> books = bookFactory.giveAGivenNumberOfBooks(5);
+        List<Book> books = BookFactory.generator(5).generate();
         bookRepository.saveAll(books);
 
         //when
@@ -57,7 +56,7 @@ class BookRepositoryTest extends AbstractRepositoryTest{
     @Test
     void shouldFindAllBooksSortedByFirstElementFromAuthorsListASC() {
         //given
-        List<Book> books = bookFactory.giveAGivenNumberOfBooksWithAuthors(5, 1);
+        List<Book> books = BookFactory.generator(5).generateWithAuthors(AuthorFactory.generator(1));
         List<Book> sortedBooks = bookUtil.sortByFirstElementOfCollection(books, ASC, "authors", "fio");
         bookRepository.saveAll(books);
 
@@ -79,7 +78,7 @@ class BookRepositoryTest extends AbstractRepositoryTest{
     @Test
     void shouldFindAllBooksSortedByFirstElementFromAuthorsListDESC() {
         //given
-        List<Book> books = bookFactory.giveAGivenNumberOfBooksWithAuthors(5, 1);
+        List<Book> books = BookFactory.generator(5).generateWithAuthors(AuthorFactory.generator(1));
         List<Book> sortedBooks = bookUtil.sortByFirstElementOfCollection(books, DESC, "authors", "fio");
         bookRepository.saveAll(books);
 

@@ -3,47 +3,66 @@ package com.example.library.factory;
 import com.example.library.domain.model.RefreshToken;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 public class RefreshTokenFactory {
 
-    private final UserFactory userFactory;
-    private final Random random;
-
-    public RefreshTokenFactory() {
-        userFactory = new UserFactory();
-        random = new Random();
+    public static RefreshTokenGenerator generator(int numberOfRefreshTokens) {
+        return new RefreshTokenGenerator(numberOfRefreshTokens);
     }
 
-    public List<RefreshToken> giveAGivenNumberOfRefreshTokens(int numberOfRefreshTokens) {
-        return Stream.generate(
-                () -> RefreshToken.builder()
-                        .token(UUID.randomUUID().toString())
-                        .expiryDate(getRandomDate())
-                        .build()
-                )
-                .limit(numberOfRefreshTokens)
-                .toList();
-    }
+    public static class RefreshTokenGenerator {
 
-    public List<RefreshToken> giveAGivenNumberOfRefreshTokensWithUser(int numberOfRefreshTokens) {
-        return Stream.generate(
-                        () -> RefreshToken.builder()
-                                .token(UUID.randomUUID().toString())
-                                .expiryDate(getRandomDate())
-                                .user(userFactory.giveAGivenNumberOfUsers(1).get(0))
-                                .build()
-                )
-                .limit(numberOfRefreshTokens)
-                .toList();
-    }
+        private final int numberOfRefreshTokens;
+        private final Random random;
 
-    private Instant getRandomDate() {
-        return new Date(Math.abs(System.currentTimeMillis() - random.nextLong(0, 100000))).toInstant();
+        private String token;
+        private Instant expiryDate;
+
+        public RefreshTokenGenerator(int numberOfRefreshTokens) {
+            this.numberOfRefreshTokens = numberOfRefreshTokens;
+            random = new Random();
+        }
+
+        public RefreshTokenGenerator token(String token) {
+            this.token = token;
+            return this;
+        }
+
+        public RefreshTokenGenerator expiryDate(Instant expiryDate) {
+            this.expiryDate = expiryDate;
+            return this;
+        }
+
+        public List<RefreshToken> generate() {
+            return Stream.generate(
+                    () -> RefreshToken.builder()
+                            .token(Objects.requireNonNullElse(token, UUID.randomUUID().toString()))
+                            .expiryDate(Objects.requireNonNullElse(expiryDate, getRandomDate()))
+                            .build()
+                    )
+                    .limit(numberOfRefreshTokens)
+                    .toList();
+        }
+
+        public List<RefreshToken> generateWithUsers(UserFactory.UserGenerator userGenerator) {
+            return Stream.generate(
+                    () -> RefreshToken.builder()
+                            .token(Objects.requireNonNullElse(token, UUID.randomUUID().toString()))
+                            .expiryDate(Objects.requireNonNullElse(expiryDate, getRandomDate()))
+                            .user(userGenerator.generate().get(0))
+                            .build()
+                    )
+                    .limit(numberOfRefreshTokens)
+                    .toList();
+        }
+
+        private Instant getRandomDate() {
+            return Instant.now().plusSeconds(random.nextLong(3600L, 31104000L));
+        }
     }
 }

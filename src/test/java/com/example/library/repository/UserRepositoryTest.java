@@ -14,20 +14,18 @@ class UserRepositoryTest extends AbstractRepositoryTest {
 
     private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
-    private final UserFactory userFactory;
 
     @Autowired
     public UserRepositoryTest(UserRepository userRepository, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
-        this.userFactory = new UserFactory();
     }
 
     @DisplayName("Test should properly find the user by the email")
     @Test
     void shouldProperlyFindByEmail() {
         //given
-        User user = userRepository.save(userFactory.giveAGivenNumberOfUsers(1).get(0));
+        User user = userRepository.save(UserFactory.generator(1).generate().get(0));
 
         //when
         User foundUser = userRepository.findByEmail(user.getEmail()).orElse(null);
@@ -41,7 +39,7 @@ class UserRepositoryTest extends AbstractRepositoryTest {
     @Test
     void shouldProperlyAddAuthority() {
         //given
-        User user = userRepository.save(userFactory.giveAGivenNumberOfUsers(1).get(0));
+        User user = userRepository.save(UserFactory.generator(1).generate().get(0));
         Authority authority = authorityRepository.save(Authority.builder().role(Role.ROLE_USER).build());
 
         //when
@@ -59,7 +57,7 @@ class UserRepositoryTest extends AbstractRepositoryTest {
     @Test
     void itShouldCheckIfUserExistsByEmail() {
         //given
-        User user = userRepository.save(userFactory.giveAGivenNumberOfUsers(1).get(0));
+        User user = userRepository.save(UserFactory.generator(1).generate().get(0));
 
         //when
         boolean expected = userRepository.existsByEmail(user.getEmail());
