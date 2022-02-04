@@ -29,7 +29,7 @@ class BookStatsRepositoryTest extends AbstractRepositoryTest {
     void itShouldProperlyAddAnEntryToTheTableForTodayDate() {
         //when
         bookStatsRepository.increaseCounter();
-        long countOfRecords = bookStatsRepository.count();
+        long countOfRecords = bookStatsRepository.countOfRecord();
 
         //then
         assertThat(countOfRecords).isEqualTo(1);
@@ -42,7 +42,7 @@ class BookStatsRepositoryTest extends AbstractRepositoryTest {
         //when
         bookStatsRepository.increaseCounter(); // it will increase already added counter for today
         long count = bookStatsRepository.getCountByDate(Instant.now());
-        long countOfRecords = bookStatsRepository.count();
+        long countOfRecords = bookStatsRepository.countOfRecord();
 
         //then
         assertThat(countOfRecords).isEqualTo(5);
