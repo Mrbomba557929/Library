@@ -2,22 +2,24 @@ package com.example.library.specification;
 
 import com.example.library.exception.business.IllegalStateFilterException;
 import com.example.library.exception.factory.ErrorFactory;
-import com.example.library.exception.factory.ErrorMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
 
+import static com.example.library.exception.factory.ErrorMessage.ILLEGAL_STATE_FILTER;
 import static com.example.library.specification.SpecificationOperation.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 @Component
 public class GenericFilter<T> {
 
     public GenericSpecificationsBuilder<T> filterBy(GenericSearchParameters parameters) {
+
         GenericSpecificationsBuilder<T> builder = new GenericSpecificationsBuilder<>();
+
         try {
 
             for (Field field : parameters.getClass().getDeclaredFields()) {
@@ -41,8 +43,8 @@ public class GenericFilter<T> {
             }
 
         } catch (IllegalStateException | IllegalAccessException e) {
-           throw ErrorFactory.exceptionBuilder(ErrorMessage.ILLEGAL_STATE_FILTER)
-                   .status(HttpStatus.EXPECTATION_FAILED)
+           throw ErrorFactory.exceptionBuilder(ILLEGAL_STATE_FILTER)
+                   .status(EXPECTATION_FAILED)
                    .link("GenericFilter/filterBy")
                    .build(IllegalStateFilterException.class);
         }

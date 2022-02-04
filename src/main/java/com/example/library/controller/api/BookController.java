@@ -62,16 +62,10 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(PAGINATE_ALL_BOOKS)
-    public ResponseEntity<?> findAll(@RequestParam(name = "sort", required = false) String sort,
-                                     @RequestParam(name = "authors", required = false) String authors,
-                                     @RequestParam(name = "genres", required = false) String genres,
-                                     @RequestParam(name = "from", required = false) Integer from,
-                                     @RequestParam(name = "to", required = false) Integer to,
-                                     @RequestParam(name = "search", required = false) String search,
+    @PostMapping(PAGINATE_ALL_BOOKS)
+    public ResponseEntity<?> findAll(@RequestBody GenericSearchParameters parameters,
                                      @RequestParam("page") int page,
                                      @RequestParam("count") int count) {
-        GenericSearchParameters parameters = specificationMapper.toSearchParameters(authors, genres, from, to, search, sort);
         Page<BookDto> books = bookService.findAll(page, count, parameters).map(bookMapper::toDto);
         bookStatsService.increaseCounter();
         return new ResponseEntity<>(books, HttpStatus.OK);
