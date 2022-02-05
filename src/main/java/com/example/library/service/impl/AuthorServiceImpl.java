@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
@@ -41,6 +40,6 @@ public class AuthorServiceImpl implements AuthorService {
                                 .build(FailedToSaveException.class);
                     }
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 }
