@@ -61,11 +61,11 @@ public class BookServiceImpl implements BookService {
         if (Objects.nonNull(parameters.sort())) {
 
             if (parameters.sort().field().equalsIgnoreCase("authors")) {
-                return sortByFirstElementInList(
+                return sortByFirstElementOfCollection(
                         bookRepository.findAll(specification, PageRequest.of(page, count)),
                         parameters.sort().field(),
                         "fio",
-                        parameters.sort().direction() == Sort.Direction.ASC ? 1 : -1
+                        parameters.sort().direction()
                 );
             }
 
@@ -114,30 +114,34 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    private Page<Book> sortByFirstElementInList(Page<Book> target, String field, String innerField, int direction) {
+    @Override
+    public Page<Book> sortByFirstElementOfCollection(Page<Book> target, String collection, String fieldOfElement, Sort.Direction direction) {
+
+        int numericDirection = direction == Sort.Direction.ASC ? 1 : -1;
+
         List<Book> sortedList = target.stream().sorted((it1, it2) -> {
             try {
 
-                List<?> list1 = (List<?>) getValueField(it1, field);
-                List<?> list2 = (List<?>) getValueField(it2, field);
+                List<?> list1 = (List<?>) getValueField(it1, collection);
+                List<?> list2 = (List<?>) getValueField(it2, collection);
 
                 if (list1.isEmpty() && list2.isEmpty()) {
                     return 0;
                 }
 
                 if (list1.isEmpty() || list2.isEmpty()) {
-                    return direction * (list1.isEmpty() ? -1 : 1);
+                    return numericDirection * (list1.isEmpty() ? -1 : 1);
                 }
 
-                String firstName1 = (String) getValueField(list1.get(0), innerField);
-                String firstName2 = (String) getValueField(list2.get(0), innerField);
+                String firstName1 = (String) getValueField(list1.get(0), fieldOfElement);
+                String firstName2 = (String) getValueField(list2.get(0), fieldOfElement);
 
-                return direction * firstName1.compareToIgnoreCase(firstName2);
+                return numericDirection * firstName1.compareToIgnoreCase(firstName2);
 
             } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
                 throw ErrorFactory.exceptionBuilder(e.getMessage())
                         .status(EXPECTATION_FAILED)
-                        .link("BookServiceImpl/sortByFirstElementInList")
+                        .link("BookServiceImpl/sortByFirstElementOfCollection")
                         .build(SortingException.class);
             }
         }).toList();

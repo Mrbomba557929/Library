@@ -4,6 +4,7 @@ import com.example.library.domain.dto.base.BookCreationDate;
 import com.example.library.domain.model.Book;
 import com.example.library.specification.GenericSearchParameters;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -63,4 +64,15 @@ public interface BookService {
      * @param id - the id of the {@link Book} entity.
      */
     void deleteById(Long id);
+
+    /**
+     * Method to sort by first element in the list.
+     *
+     * @param target - list of the {@link Book} entities.
+     * @param collection - name of list.
+     * @param fieldOfElement - the name of the element collection in the sheet.
+     * @param direction - ASC or DESC. (1 or -1)
+     * @return sorted page of the {@link Book} entities.
+     */
+    Page<Book> sortByFirstElementOfCollection(Page<Book> target, String collection, String fieldOfElement, Sort.Direction direction);
 }

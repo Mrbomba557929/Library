@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BookRepositoryTest extends AbstractRepositoryTest{
+class BookRepositoryTest extends AbstractRepositoryTest {
 
     private final BookRepository bookRepository;
 

@@ -62,7 +62,7 @@ public class RefreshTokenFactory {
         }
 
         private Instant getRandomDate() {
-            return Instant.now().plusSeconds(random.nextLong(3600L, 31104000L));
+            return Instant.now().plusSeconds(random.nextLong(86400L, 31104000L));
         }
     }
 }

@@ -3,7 +3,6 @@ package com.example.library.controller.api;
 import com.example.library.domain.model.Book;
 import com.example.library.domain.dto.base.BookDto;
 import com.example.library.mapper.BookMapper;
-import com.example.library.mapper.SpecificationMapper;
 import com.example.library.service.BookService;
 import com.example.library.service.BookStatsService;
 import com.example.library.specification.GenericSearchParameters;
@@ -31,7 +30,6 @@ public class BookController {
 
     private final BookService bookService;
     private final BookMapper bookMapper;
-    private final SpecificationMapper specificationMapper;
     private final BookStatsService bookStatsService;
 
     @GetMapping(DEFAULT_URL)
