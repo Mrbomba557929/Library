@@ -57,18 +57,18 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public RefreshToken verifyExpiration(String refreshTokenRequest) {
-        RefreshToken refreshToken = findByToken(refreshTokenRequest);
+    public RefreshToken verifyExpiration(String refreshToken) {
+        RefreshToken foundRefreshToken = findByToken(refreshToken);
 
-        if (refreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
-            refreshTokenRepository.delete(refreshToken);
+        if (foundRefreshToken.getExpiryDate().compareTo(Instant.now()) < 0) {
+            refreshTokenRepository.delete(foundRefreshToken);
             throw ErrorFactory.exceptionBuilder(TOKEN_EXPIRED)
                     .status(FORBIDDEN)
                     .link("RefreshTokenServiceImpl/verifyExpiration")
                     .build(TokenExpiredException.class);
         }
 
-        return refreshToken;
+        return foundRefreshToken;
     }
 
     @Override

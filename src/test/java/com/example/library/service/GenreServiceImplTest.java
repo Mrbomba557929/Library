@@ -1,6 +1,5 @@
 package com.example.library.service;
 
-import com.example.library.domain.model.Book;
 import com.example.library.domain.model.Genre;
 import com.example.library.exception.business.FailedToSaveException;
 import com.example.library.factory.GenreFactory;
