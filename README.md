@@ -2,19 +2,20 @@
 
 __TECHNOLOGY STACK:__
 * Java 17
-* Spring boot
+* Spring Boot
 * Spring Web
 * Spring Jpa
 * Hibernate
 * Spring Security
 * Flyway
-* Postgres database
+* Postgres Database
 * Lombok
+* Maven
 
 __FOR TESTS:__
 * JUnit 5
 * Mockito
-* Embedded postgres database
+* Embedded Postgres Database
 
 __APIs:__
 * __GET__
